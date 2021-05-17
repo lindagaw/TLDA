@@ -20,7 +20,6 @@ tgt_dataset = "USPS"
 tgt_encoder_restore = "snapshots/ADDA-target-encoder-final.pt"
 tgt_model_trained = True
 
-
 # params for setting up models
 model_root = "snapshots"
 d_input_dims = 500
