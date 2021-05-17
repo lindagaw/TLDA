@@ -32,16 +32,16 @@ if __name__ == '__main__':
                                       output_dims=params.d_output_dims),
                         restore=params.d_model_restore)
     src_detector = init_model(net=Detector(),
-                                restore=params.src_detector_restore)
+                                restore=params.src_classifier_restore)
     tgt_detector = init_model(net=Detector(),
-                                restore=params.tgt_detector_restore)
+                                restore=params.src_classifier_restore)
 
     # train source detector
     print("=== Training detector for source domain ===")
     print(">>> Source Detector <<<")
     print(src_detector)
-
-    src_classifier = train_detector(src_detector, src_data_loader)
+    if not (src_detector.restored):
+        src_classifier = train_detector(src_detector, src_data_loader)
     # eval source model
     print("=== Evaluating source detector for source domain ===")
     eval_detector(src_detector, src_data_loader_eval)
@@ -50,8 +50,8 @@ if __name__ == '__main__':
     print("=== Training detector for target domain ===")
     print(">>> Target Detector <<<")
     print(tgt_detector)
-
-    tgt_classifier = train_detector(tgt_detector, tgt_data_loader)
+    if not (tgt_detector.restored):
+        tgt_classifier = train_detector(tgt_detector, tgt_data_loader)
     # eval target model
     print("=== Evaluating source detector for target domain ===")
     eval_detector(tgt_detector, tgt_data_loader_eval)
