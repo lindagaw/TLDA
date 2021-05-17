@@ -1,6 +1,6 @@
-"""Dataset setting and data loader for USPS.
+"""Dataset setting and data loader for SYNTH.
 Modified from
-https://github.com/mingyuliutw/CoGAN/blob/master/cogan_pytorch/src/dataset_usps.py
+https://github.com/mingyuliutw/CoGAN/blob/master/cogan_pytorch/src/dataset_synth.py
 """
 
 import gzip
@@ -16,8 +16,8 @@ from torchvision import datasets, transforms
 import params
 
 
-class USPS(data.Dataset):
-    """USPS Dataset.
+class SYNTH(data.Dataset):
+    """SYNTH Dataset.
     Args:
         root (string): Root directory of dataset where dataset file exist.
         train (bool, optional): If True, resample from dataset randomly.
@@ -29,13 +29,13 @@ class USPS(data.Dataset):
             E.g, ``transforms.RandomCrop``
     """
 
-    url = "https://raw.githubusercontent.com/mingyuliutw/CoGAN/master/cogan_pytorch/data/uspssample/usps_28x28.pkl"
+    url = "https://raw.githubusercontent.com/mingyuliutw/CoGAN/master/cogan_pytorch/data/synthsample/synth_28x28.pkl"
 
     def __init__(self, root, train=True, transform=None, download=False):
-        """Init USPS dataset."""
+        """Init SYNTH dataset."""
         # init params
         self.root = os.path.expanduser(root)
-        self.filename = "usps_28x28.pkl"
+        self.filename = "synth_28x28.pkl"
         self.train = train
         # Num of Train = 7438, Num ot Test 1860
         self.transform = transform
@@ -111,8 +111,8 @@ class USPS(data.Dataset):
         return images, labels
 
 
-def get_usps(train):
-    """Get USPS dataset loader."""
+def get_synth(train):
+    """Get SYNTH dataset loader."""
     # image pre-processing
     pre_process = transforms.Compose([transforms.ToTensor(),
                                       transforms.Normalize(
@@ -120,14 +120,14 @@ def get_usps(train):
                                           std=params.dataset_std)])
     pre_process =  transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))])
     # dataset and data loader
-    usps_dataset = USPS(root=params.data_root,
+    synth_dataset = SYNTH(root=params.data_root,
                         train=train,
                         transform=pre_process,
                         download=True)
 
-    usps_data_loader = torch.utils.data.DataLoader(
-        dataset=usps_dataset,
+    synth_data_loader = torch.utils.data.DataLoader(
+        dataset=synth_dataset,
         batch_size=params.batch_size,
         shuffle=True)
 
-    return usps_data_loader
+    return synth_data_loader

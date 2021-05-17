@@ -1,5 +1,3 @@
-"""Adversarial adaptation to train target encoder."""
-
 import os
 
 import torch
@@ -68,7 +66,6 @@ def train_tgt(src_encoder, tgt_encoder, critic,
             loss_critic.backward()
 
             # optimize critic
-            optimizer_critic.step()
 
             pred_cls = torch.squeeze(pred_concat.max(1)[1])
             acc = (pred_cls == label_concat).float().mean()
@@ -107,9 +104,9 @@ def train_tgt(src_encoder, tgt_encoder, critic,
                               params.num_epochs,
                               step + 1,
                               len_data_loader,
-                              loss_critic.data[0],
-                              loss_tgt.data[0],
-                              acc.data[0]))
+                              loss_critic.data,
+                              loss_tgt.data,
+                              acc.data))
 
         #############################
         # 2.4 save model parameters #
@@ -117,15 +114,15 @@ def train_tgt(src_encoder, tgt_encoder, critic,
         if ((epoch + 1) % params.save_step == 0):
             torch.save(critic.state_dict(), os.path.join(
                 params.model_root,
-                "ADDA-critic-{}.pt".format(epoch + 1)))
+                dataset_name + "-ADDA-critic-{}.pt".format(epoch + 1)))
             torch.save(tgt_encoder.state_dict(), os.path.join(
                 params.model_root,
-                "ADDA-target-encoder-{}.pt".format(epoch + 1)))
+                dataset_name + "-ADDA-target-encoder-{}.pt".format(epoch + 1)))
 
     torch.save(critic.state_dict(), os.path.join(
         params.model_root,
-        "ADDA-critic-final.pt"))
+        dataset_name + "-ADDA-critic-final.pt"))
     torch.save(tgt_encoder.state_dict(), os.path.join(
         params.model_root,
-        "ADDA-target-encoder-final.pt"))
+        dataset_name + "-ADDA-target-encoder-final.pt"))
     return tgt_encoder

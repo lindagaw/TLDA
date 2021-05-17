@@ -1,8 +1,13 @@
 """Main script for ADDA."""
 
+from six.moves import urllib
+opener = urllib.request.build_opener()
+opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+urllib.request.install_opener(opener)
+
 import params
-from core import eval_src, eval_tgt, train_src, train_tgt
-from models import Discriminator, LeNetClassifier, LeNetEncoder
+from core import eval_src, eval_tgt, train_src, train_tgt, train_detector, eval_detector
+from models import Discriminator, LeNetClassifier, LeNetEncoder, Detector
 from utils import get_data_loader, init_model, init_random_seed
 
 if __name__ == '__main__':
@@ -26,6 +31,32 @@ if __name__ == '__main__':
                                       hidden_dims=params.d_hidden_dims,
                                       output_dims=params.d_output_dims),
                         restore=params.d_model_restore)
+    src_detector = init_model(net=Detector(),
+                                restore=params.src_classifier_restore)
+
+    # train source detector
+    print("=== Training detector for source domain ===")
+    print(">>> Source Detector <<<")
+    print(src_detector)
+    if not (src_detector.restored):
+        src_classifier = train_detector(src_detector, src_data_loader)
+    # eval source model
+    print("=== Evaluating source detector for source domain ===")
+    eval_detector(src_detector, src_data_loader_eval)
+
+    # train target detector
+    print("=== Training detector for target domain ===")
+    print(">>> Target Detector <<<")
+    print(tgt_detector)
+    if not (tgt_detector.restored):
+        tgt_classifier = train_detector(tgt_detector, tgt_data_loader)
+    # eval target model
+    print("=== Evaluating source detector for target domain ===")
+    eval_detector(tgt_detector, tgt_data_loader_eval)
+
+    print("===================================================================")
+    print("=== Start training the Discriminator, Encoders, and Classifiers ===")
+    print("===================================================================")
 
     # train source model
     print("=== Training classifier for source domain ===")

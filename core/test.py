@@ -6,15 +6,15 @@ import torch.nn as nn
 from utils import make_variable
 
 
-def eval_tgt(encoder, classifier, data_loader):
+def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tgt_detector):
     """Evaluation for target encoder by source classifier on target dataset."""
     # set eval state for Dropout and BN layers
     encoder.eval()
     classifier.eval()
 
     # init loss and accuracy
-    loss = 0
-    acc = 0
+    loss = 0.0
+    acc = 0.0
 
     # set loss function
     criterion = nn.CrossEntropyLoss()
@@ -23,6 +23,19 @@ def eval_tgt(encoder, classifier, data_loader):
     for (images, labels) in data_loader:
         images = make_variable(images, volatile=True)
         labels = make_variable(labels).squeeze_()
+
+        dist_src = src_detector(images).squeeze_()
+        dist_tgt = tgt_detector(images).squeeze_()
+
+        likely_class_src = np.argmax(np.asarray(dist_src))
+        likely_class_tgt = np.argmax(np.asarray(dist_tgt))
+
+        if dist_src[likely_class_src] > dist_tgt[likely_class_tgt] and dist_src[likely_class_src] > 0.8:
+            encoder = src_encoder
+        elif dist_src[likely_class_src] < dist_tgt[likely_class_tgt] and dist_tgt[likely_class_tgt] > 0.8 :
+            encoder = tgt_encoder
+        else:
+            continue
 
         preds = classifier(encoder(images))
         loss += criterion(preds, labels).data[0]
