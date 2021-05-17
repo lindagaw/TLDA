@@ -1,4 +1,6 @@
 """Pre-train detector for source dataset."""
+import torch
+import numpy as np
 
 import torch.nn as nn
 import torch.optim as optim
@@ -87,8 +89,12 @@ def eval_detector(detector, data_loader):
 
         preds = detector(images)
 
-        #print(preds.shape)
-        #loss += criterion(preds, labels).data
+        try:
+            loss += criterion(preds, labels).data
+        except:
+            labels = [np.where(r==1)[0][0] for r in labels]
+            loss += criterion(preds, labels).data
+
 
         pred_cls = preds.data.max(1)[1]
         acc += pred_cls.eq(labels.data).cpu().sum()
