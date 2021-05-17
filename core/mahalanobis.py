@@ -82,12 +82,9 @@ def eval_detector(detector, data_loader):
     # evaluate network
     for (images, labels) in data_loader:
         images = make_variable(images, volatile=True)
-        labels = make_variable(labels)
+        labels = make_variable(labels).squeeze_()
 
         preds = detector(images)
-
-        print(labels.shape)
-
         loss += criterion(preds, labels).data
         pred_cls = preds.data.max(1)[1]
 
