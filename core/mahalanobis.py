@@ -1,5 +1,4 @@
 """Pre-train detector for source dataset."""
-import numpy as np
 import torch.nn as nn
 import torch.optim as optim
 
