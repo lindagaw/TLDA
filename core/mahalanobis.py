@@ -1,5 +1,5 @@
 """Pre-train detector for source dataset."""
-import torch
+
 import torch.nn as nn
 import torch.optim as optim
 
@@ -85,11 +85,7 @@ def eval_detector(detector, data_loader):
         images = make_variable(images, volatile=True)
         labels = make_variable(labels)
 
-        try:
-            preds = torch.argmax(detector(images))
-        except:
-            preds = detector(images)
-            
+        preds = detector(images)
         loss += criterion(preds, labels).data
 
         pred_cls = preds.data.max(1)[1]
