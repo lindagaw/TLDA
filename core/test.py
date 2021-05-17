@@ -27,8 +27,8 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
         dist_src = src_detector(images).squeeze_()
         dist_tgt = tgt_detector(images).squeeze_()
 
-        likely_class_src = np.argmax(np.asarray(dist_src))
-        likely_class_tgt = np.argmax(np.asarray(dist_tgt))
+        likely_class_src = torch.argmax(dist_src)
+        likely_class_tgt = torch.argmax(dist_tgt)
 
         if dist_src[likely_class_src] > dist_tgt[likely_class_tgt] and dist_src[likely_class_src] > 0.8:
             encoder = src_encoder

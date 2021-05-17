@@ -85,7 +85,7 @@ def eval_detector(detector, data_loader):
         images = make_variable(images, volatile=True)
         labels = make_variable(labels)
 
-        preds = detector(images)
+        preds = torch.argmax(detector(images))
         loss += criterion(preds, labels).data
 
         pred_cls = preds.data.max(1)[1]
