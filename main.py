@@ -32,9 +32,9 @@ if __name__ == '__main__':
                                       output_dims=params.d_output_dims),
                         restore=params.d_model_restore)
     src_detector = init_model(net=Detector(),
-                                restore=params.src_classifier_restore)
+                                restore=params.src_detector_restore)
     tgt_detector = init_model(net=Detector(),
-                                restore=params.tgt_classifier_restore)
+                                restore=params.tgt_detector_restore)
 
     # train source detector
     print("=== Training detector for source domain ===")
