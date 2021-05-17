@@ -87,8 +87,8 @@ def eval_detector(detector, data_loader):
 
         preds = detector(images)
 
-        print(preds.shape)
-        loss += criterion(preds, labels).data
+        #print(preds.shape)
+        #loss += criterion(preds, labels).data
 
         pred_cls = preds.data.max(1)[1]
         acc += pred_cls.eq(labels.data).cpu().sum()
