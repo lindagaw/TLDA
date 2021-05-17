@@ -92,7 +92,8 @@ def eval_detector(detector, data_loader):
         try:
             loss += criterion(preds, labels).data
         except:
-            labels = [np.where(r==1)[0][0] for r in labels]
+
+            labels = [np.where(r==1)[0][0] for r in labels.cpu()]
             loss += criterion(preds, labels).data
 
 
