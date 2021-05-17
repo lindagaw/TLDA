@@ -86,6 +86,8 @@ def eval_detector(detector, data_loader):
         labels = make_variable(labels)
 
         preds = detector(images)
+
+        print(preds.shape)
         loss += criterion(preds, labels).data
 
         pred_cls = preds.data.max(1)[1]
