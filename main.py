@@ -35,9 +35,9 @@ if __name__ == '__main__':
                         restore=params.d_model_restore)
 
     src_detector = init_model(net=Detector(),
-                                restore=params.src_detector_restore)
+                                restore=None)
     tgt_detector = init_model(net=Detector(),
-                                restore=params.tgt_detector_restore)
+                                restore=None)
     # train source detector
     print("=== Training detector for source domain ===")
     print(">>> Source Detector <<<")
