@@ -28,17 +28,17 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
 
         torch.no_grad()
 
+        dists_src = src_detector(images).squeeze_()
+        dists_tgt = tgt_detector(images).squeeze_()
 
-        assert(not dists_src.all() == dists_tgt.all())
 
         src_or_tgt = []
 
         for dist_src, dist_tgt in zip(dists_src, dists_tgt):
+            dist_src = torch.argmax(dist_src.squeeze())
+            dist_tgt = torch.argmax(dist_src.squeeze())
 
-            #dist_src = torch.max(dist_src.squeeze())
-            #dist_tgt = torch.max(dist_src.squeeze())
-
-            print((torch.argmax(dist_src), torch.argmax(dist_tgt)))
+            print((dist_src, dist_tgt))
 
             if dist_src > dist_tgt and dist_src > 800:
                 src_or_tgt.append(0)
