@@ -36,7 +36,7 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
 
         for dist_src, dist_tgt in zip(dists_src, dists_tgt):
             dist_src = torch.argmax(dist_src.squeeze())
-            dist_tgt = torch.argmax(dist_src.squeeze())
+            dist_tgt = torch.argmax(dist_tgt.squeeze())
 
             print((dist_src, dist_tgt))
 
