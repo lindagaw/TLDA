@@ -28,6 +28,9 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
         dists_src = src_detector(images).squeeze_()
         dists_tgt = tgt_detector(images).squeeze_()
 
+        dists_src.no_grad()
+        dists_tgt.no_grad()
+
         src_or_tgt = []
 
         for dist_src, dist_tgt in zip(dists_src, dists_tgt):
