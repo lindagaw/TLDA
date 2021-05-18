@@ -60,7 +60,9 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
             else:
                 preds.append(pred_tgt_encoder)
 
-        preds = torch.Tensor(np.asarray(preds)).cuda()
+        preds = torch.Tensor(np.asarray(preds)).cuda().squeeze_()
+
+        print(preds.shape)
 
         loss += criterion(preds, labels).data
         pred_cls = preds.data.max(1)[1]
