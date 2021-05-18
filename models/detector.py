@@ -33,7 +33,7 @@ class Detector(nn.Module):
 
     def forward(self, input):
         """Forward the Detector."""
-        conv_out = self.encoder(input)
+        conv_out = input
         feat = self.fc1(conv_out.view(-1, 50 * 4 * 4))
         out = F.dropout(F.relu(feat), training=self.training)
         out = self.fc2(out)
