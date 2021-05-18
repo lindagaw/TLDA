@@ -52,13 +52,13 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
                     preds = pred_src_encoder
                     initialized = True
                 else:
-                    preds = torch.stack(preds + pred_src_encoder)
+                    preds = torch.stack((preds, pred_src_encoder))
             else:
                 if initialized == False:
                     preds = pred_tgt_encoder
                     initialized = True
                 else:
-                    preds = torch.stack(preds + pred_tgt_encoder)
+                    preds = torch.stack((preds, pred_tgt_encoder))
 
         loss += criterion(preds, labels).data[0]
 
