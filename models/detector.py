@@ -5,15 +5,15 @@ from torch import nn
 
 
 class Detector(nn.Module):
-    """Detector encoder model for ADDA."""
+    """Detector detectorEncoder model for ADDA."""
 
     def __init__(self):
-        """Init Detector encoder."""
+        """Init Detector detectorEncoder."""
         super(Detector, self).__init__()
 
         self.restored = False
 
-        self.encoder = nn.Sequential(
+        self.detectorEncoder = nn.Sequential(
             # 1st conv layer
             # input [1 x 28 x 28]
             # output [20 x 12 x 12]
@@ -28,15 +28,15 @@ class Detector(nn.Module):
             nn.MaxPool2d(kernel_size=2),
             nn.ReLU()
         )
-        self.fc1 = nn.Linear(50 * 4 * 4, 500)
-        self.fc2 = nn.Linear(500, 10)
+        self.fc1_detector = nn.Linear(50 * 4 * 4, 500)
+        self.fc2_detector = nn.Linear(500, 10)
 
     def forward(self, input):
         """Forward the Detector."""
-        conv_out = input
-        feat = self.fc1(conv_out.view(-1, 50 * 4 * 4))
+        conv_out = self.detectorEncoder(input)
+        feat = self.fc1_detector(conv_out.view(-1, 50 * 4 * 4))
         out = F.dropout(F.relu(feat), training=self.training)
-        out = self.fc2(out)
+        out = self.fc2_detector(out)
         return out
 
 
@@ -45,13 +45,13 @@ class DetectorClassifier(nn.Module):
     """Detector classifier model for ADDA."""
 
     def __init__(self):
-        """Init Detector encoder."""
+        """Init Detector detectorEncoder."""
         super(DetectorClassifier, self).__init__()
-        self.fc2 = nn.Linear(500, 10)
+        self.fc2_detector = nn.Linear(500, 10)
 
     def forward(self, feat):
         """Forward the Detector classifier."""
         out = F.dropout(F.relu(feat), training=self.training)
-        out = self.fc2(out)
+        out = self.fc2_detector(out)
         return out
 '''
