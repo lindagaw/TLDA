@@ -98,6 +98,7 @@ if __name__ == '__main__':
 
     # eval target encoder on test set of target dataset
     print("=== Evaluating classifier for encoded target domain ===")
-
-    print(">>> domain adaption <<<")
+    print(">>> only source detector <<<")
+    eval_tgt(src_encoder, tgt_encoder, src_classifier, tgt_data_loader_eval, src_detector, src_detector)
+    print(">>> source and target detectors <<<")
     eval_tgt(src_encoder, tgt_encoder, src_classifier, tgt_data_loader_eval, src_detector, tgt_detector)
