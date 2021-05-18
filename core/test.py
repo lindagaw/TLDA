@@ -33,7 +33,6 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
         src_or_tgt = []
 
         for dist_src, dist_tgt in zip(dists_src, dists_tgt):
-            print(dist_src.shape)
             dist_src = torch.max(dist_src)
             dist_tgt = torch.max(dist_src)
             if dist_src < dist_tgt:
@@ -53,7 +52,9 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
             else:
                 preds.append(pred_tgt_encoder)
 
-        preds = torch.tensor(preds)
+
+        print(preds)
+        #preds = torch.tensor(preds)
 
         loss += criterion(preds, labels).data[0]
 
