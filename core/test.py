@@ -1,5 +1,6 @@
 """Test script to classify target data."""
 import numpy as np
+from sklearn.metrics import accuracy_score
 import torch
 import torch.nn as nn
 
@@ -40,10 +41,12 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
             dist_src = torch.max(dist_src.squeeze())
             dist_tgt = torch.max(dist_tgt.squeeze())
 
-            if dist_src > dist_tgt:
+            if dist_src > 800:
                 src_or_tgt.append(0)
-            else:
+            elif dist_tgt > 4:
                 src_or_tgt.append(1)
+            else:
+                src_or_tgt.append(2)
 
 
         preds_src_encoder = classifier(src_encoder(images))
@@ -60,9 +63,7 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
                 preds.append(pred_src_encoder)
 
         preds = torch.Tensor(np.asarray(preds)).cuda()
-
         loss += criterion(preds, labels).data
-
         pred_cls = preds.data.max(1)[1]
         acc += pred_cls.eq(labels.data).cpu().sum()
 
