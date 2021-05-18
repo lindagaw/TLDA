@@ -31,12 +31,14 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
         likely_class_src = torch.argmax(dist_src)
         likely_class_tgt = torch.argmax(dist_tgt)
 
+        '''
         if dist_src[likely_class_src] > dist_tgt[likely_class_tgt]:
             encoder = src_encoder
         elif dist_src[likely_class_src] < dist_tgt[likely_class_tgt]:
             encoder = tgt_encoder
         else:
             continue
+        '''
 
         preds = classifier(encoder(images))
         loss += criterion(preds, labels).data[0]
