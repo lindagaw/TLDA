@@ -9,7 +9,8 @@ from utils import make_variable
 def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tgt_detector):
     """Evaluation for target encoder by source classifier on target dataset."""
     # set eval state for Dropout and BN layers
-    encoder.eval()
+    src_encoder.eval()
+    tgt_encoder.eval()
     classifier.eval()
 
     # init loss and accuracy
