@@ -28,21 +28,19 @@ class Detector(nn.Module):
             nn.MaxPool2d(kernel_size=2),
             nn.ReLU()
         )
-        self.fc1 = nn.Sequential(
-            nn.Linear(50 * 4 * 4, 500),
-            nn.Linear(500, 10)
-        )
+        self.fc1 = nn.Linear(50 * 4 * 4, 500)
+        self.fc2 = nn.Linear(500, 10)
 
     def forward(self, input):
         """Forward the Detector."""
         conv_out = self.encoder(input)
-        feat = self.fc1(conv_out.view(-1, 500))
+        feat = self.fc1(conv_out.view(-1, 50 * 4 * 4))
         out = F.dropout(F.relu(feat), training=self.training)
         out = self.fc2(out)
         return out
 
 
-
+'''
 class DetectorClassifier(nn.Module):
     """Detector classifier model for ADDA."""
 
@@ -56,3 +54,4 @@ class DetectorClassifier(nn.Module):
         out = F.dropout(F.relu(feat), training=self.training)
         out = self.fc2(out)
         return out
+'''
