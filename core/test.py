@@ -17,6 +17,8 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
     loss = 0.0
     acc = 0.0
 
+    true_count = 0
+
     # set loss function
     criterion = nn.CrossEntropyLoss()
 
@@ -37,8 +39,10 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
             dist_tgt = torch.max(dist_src)
             if dist_src < dist_tgt and dist_tgt > 0.9:
                 src_or_tgt.append(1)
+                true_count += 1
             elif dist_src > dist_tgt and dist_src > 0.9:
                 src_or_tgt.append(0)
+                true_count += 1
             else:
                 continue
 
@@ -62,7 +66,7 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
         pred_cls = preds.data.max(1)[1]
         acc += pred_cls.eq(labels.data).cpu().sum()
 
-    loss /= len(data_loader)
-    acc /= len(data_loader.dataset)
+    loss /= true_count()
+    acc /= true_count()
 
     print("Avg Loss = {}, Avg Accuracy = {:2%}".format(loss, acc))
