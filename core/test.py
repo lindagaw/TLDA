@@ -30,6 +30,9 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
         dists_src = src_detector(images).squeeze_()
         dists_tgt = tgt_detector(images).squeeze_()
 
+        print(dists_src)
+        print(dists_src.shape)
+
         src_or_tgt = []
 
         for dist_src, dist_tgt in zip(dists_src, dists_tgt):
@@ -37,10 +40,8 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
             dist_tgt = torch.max(dist_src)
             if dist_src < dist_tgt:
                 src_or_tgt.append(1)
-                print(src_or_tgt)
             else:
                 src_or_tgt.append(0)
-                print(src_or_tgt)
 
         preds_src_encoder = classifier(src_encoder(images))
         preds_tgt_encoder = classifier(tgt_encoder(images))
