@@ -78,7 +78,7 @@ if __name__ == '__main__':
     # eval source model
     print("=== Evaluating classifier for source domain ===")
     eval_src(src_encoder, src_classifier, src_data_loader_eval)
-
+    #src_encoder, tgt_encoder, classifier, data_loader, src_detector, tgt_detector
     # train target encoder by GAN
     print("=== Training encoder for target domain ===")
     print(">>> Target Encoder <<<")
@@ -98,6 +98,6 @@ if __name__ == '__main__':
     # eval target encoder on test set of target dataset
     print("=== Evaluating classifier for encoded target domain ===")
     print(">>> source only <<<")
-    eval_tgt(src_encoder, src_classifier, tgt_data_loader_eval)
+    eval_tgt(src_encoder, src_encoder, src_classifier, tgt_data_loader_eval, src_detector, src_detector)
     print(">>> domain adaption <<<")
-    eval_tgt(tgt_encoder, src_classifier, tgt_data_loader_eval)
+    eval_tgt(src_encoder, tgt_encoder, src_classifier, tgt_data_loader_eval, src_detector, tgt_detector)
