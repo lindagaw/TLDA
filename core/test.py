@@ -41,7 +41,7 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
             dist_src = torch.max(dist_src.squeeze())
             dist_tgt = torch.max(dist_tgt.squeeze())
 
-            if dist_src > 800:
+            if dist_src > 1000:
                 src_or_tgt.append(0)
             elif dist_tgt > 4:
                 src_or_tgt.append(1)
@@ -66,6 +66,16 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
         loss += criterion(preds, labels).data
         pred_cls = preds.data.max(1)[1]
         acc += pred_cls.eq(labels.data).cpu().sum()
+
+        valid_preds = []
+        valid_labels = []
+        for origin, result, label in zip(src_or_tgt, pred_cls, labels):
+            if not origin == 2:
+                valid_preds.append(result)
+                valid_labels.append(label)
+
+        batch_acc = accuracy_score(y_true=valid_labels, y_pred=valid_preds)
+        print("Batch Acc = {:2%}".format(batch_acc))
 
     loss /= len(data_loader)
     acc /= len(data_loader.dataset)
