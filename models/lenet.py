@@ -28,18 +28,13 @@ class LeNetEncoder(nn.Module):
             nn.MaxPool2d(kernel_size=2),
             nn.ReLU()
         )
-        self.fc1 = nn.Sequential(
-                nn.Flatten(),
-                nn.Linear(50, 4096),
-                nn.Dropout(),
-                nn.Linear(4096, 500)
-            )
+        self.fc1 = nn.Linear(50 * 4 * 4, 500)
 
-        def forward(self, input):
-            """Forward the LeNet."""
-            conv_out = self.encoder(input)
-            feat = self.fc1(conv_out.view(-1, 50))
-            return feat
+    def forward(self, input):
+        """Forward the LeNet."""
+        conv_out = self.encoder(input)
+        feat = self.fc1(conv_out.view(-1, 50 * 4 * 4))
+        return feat
 
 
 class LeNetClassifier(nn.Module):

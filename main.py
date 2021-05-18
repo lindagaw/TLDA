@@ -1,4 +1,5 @@
 """Main script for ADDA."""
+import pretty_errors
 
 from six.moves import urllib
 opener = urllib.request.build_opener()
@@ -7,7 +8,7 @@ urllib.request.install_opener(opener)
 
 import params
 from core import eval_src, eval_tgt, train_src, train_tgt, train_detector, eval_detector
-from models import Discriminator, LeNetClassifier, LeNetEncoder, Detector
+from models import Discriminator, LeNetClassifier, LeNetEncoder, Detector, DetectorClassifier
 from utils import get_data_loader, init_model, init_random_seed
 
 if __name__ == '__main__':
@@ -31,9 +32,11 @@ if __name__ == '__main__':
                                       hidden_dims=params.d_hidden_dims,
                                       output_dims=params.d_output_dims),
                         restore=params.d_model_restore)
+
     src_detector = init_model(net=Detector(),
                                 restore=params.src_classifier_restore)
-
+    tgt_detector = init_model(net=Detector(),
+                                restore=params.src_classifier_restore)
     # train source detector
     print("=== Training detector for source domain ===")
     print(">>> Source Detector <<<")
