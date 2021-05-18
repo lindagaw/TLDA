@@ -17,8 +17,6 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
     loss = 0.0
     acc = 0.0
 
-    true_count = 0
-
     # set loss function
     criterion = nn.CrossEntropyLoss()
 
@@ -37,14 +35,10 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
         for dist_src, dist_tgt in zip(dists_src, dists_tgt):
             dist_src = torch.max(dist_src)
             dist_tgt = torch.max(dist_src)
-            if dist_src < dist_tgt and dist_tgt > 0.55:
+            if dist_src < dist_tgt:
                 src_or_tgt.append(1)
-                true_count += 1
-            elif dist_src > dist_tgt and dist_src > 0.55:
-                src_or_tgt.append(0)
-                true_count += 1
             else:
-                continue
+                src_or_tgt.append(0)
 
         preds_src_encoder = classifier(src_encoder(images))
         preds_tgt_encoder = classifier(tgt_encoder(images))
@@ -60,15 +54,14 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
             else:
                 preds.append(pred_tgt_encoder)
 
-        preds = torch.Tensor(np.asarray(preds)).cuda().squeeze_()
+        preds = torch.Tensor(np.asarray(preds)).cuda()
 
-        #print(preds.shape)
+        loss += criterion(preds, labels).data
 
-        loss += criterion(preds, labels).data[0]
         pred_cls = preds.data.max(1)[1]
         acc += pred_cls.eq(labels.data).cpu().sum()
 
-    loss /= true_count()
-    acc /= true_count()
+    loss /= len(data_loader)
+    acc /= len(data_loader.dataset)
 
-    print("Avg Loss = {}, Avg Accuracy = {:2%}, # of in dist tgt xs".format(loss, acc, true_count()))
+    print("Avg Loss = {}, Avg Accuracy = {:2%}".format(loss, acc))
