@@ -114,15 +114,15 @@ def train_tgt(src_encoder, tgt_encoder, critic,
         if ((epoch + 1) % params.save_step == 0):
             torch.save(critic.state_dict(), os.path.join(
                 params.model_root,
-                dataset_name + "-ADDA-critic-{}.pt".format(epoch + 1)))
+                "ADDA-critic-{}.pt".format(epoch + 1)))
             torch.save(tgt_encoder.state_dict(), os.path.join(
                 params.model_root,
-                dataset_name + "-ADDA-target-encoder-{}.pt".format(epoch + 1)))
+                "ADDA-target-encoder-{}.pt".format(epoch + 1)))
 
     torch.save(critic.state_dict(), os.path.join(
         params.model_root,
-        dataset_name + "-ADDA-critic-final.pt"))
+        "ADDA-critic-final.pt"))
     torch.save(tgt_encoder.state_dict(), os.path.join(
         params.model_root,
-        dataset_name + "-ADDA-target-encoder-final.pt"))
+        "ADDA-target-encoder-final.pt"))
     return tgt_encoder
