@@ -25,25 +25,31 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
         images = make_variable(images, volatile=True)
         labels = make_variable(labels).squeeze_()
 
-        dist_src = src_detector(images).squeeze_()
-        dist_tgt = tgt_detector(images).squeeze_()
+        dists_src = src_detector(images).squeeze_()
+        dists_tgt = tgt_detector(images).squeeze_()
 
-        likely_class_src = torch.argmax(dist_src)
-        likely_class_tgt = torch.argmax(dist_tgt)
+        src_or_tgt = []
 
-        print(dist_src.shape)
-        print(likely_class_src)
+        for dist_src, dist_tgt in zip(dists_src, dists_tgt):
+            dist_src = torch.max(dist_src.squeeze_())
+            dist_tgt = torch.max(dist_src.squeeze_())
+            if dist_src < dist_tgt:
+                src_or_tgt.append(1)
+            else:
+                src_or_tgt.append(0)
 
-        '''
-        if dist_src[likely_class_src] > dist_tgt[likely_class_tgt]:
-            encoder = src_encoder
-        elif dist_src[likely_class_src] < dist_tgt[likely_class_tgt]:
-            encoder = tgt_encoder
-        else:
-            continue
-        '''
+        preds_src_encoder = classifier(src_encoder(images))
+        preds_tgt_encoder = classifier(tgt_encoder(images))
 
-        preds = classifier(encoder(images))
+        preds = []
+         for origin, pred_src_encoder, pred_tgt_encoder in zip (src_or_tgt, preds_src_encoder, preds_tgt_encoder):
+             if origin == 0:
+                 preds.append(pred_src_encoder)
+             else:
+                 preds.append(pred_tgt_encoder)
+
+        preds = torch.tensor(preds)
+
         loss += criterion(preds, labels).data[0]
 
         pred_cls = preds.data.max(1)[1]
