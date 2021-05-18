@@ -26,6 +26,7 @@ if __name__ == '__main__':
                              restore=params.src_encoder_restore)
     src_classifier = init_model(net=LeNetClassifier(),
                                 restore=params.src_classifier_restore)
+
     tgt_encoder = init_model(net=LeNetEncoder(),
                              restore=params.tgt_encoder_restore)
     critic = init_model(Discriminator(input_dims=params.d_input_dims,
@@ -33,10 +34,8 @@ if __name__ == '__main__':
                                       output_dims=params.d_output_dims),
                         restore=params.d_model_restore)
 
-    src_detector = init_model(net=Detector(),
-                                restore=params.src_classifier_restore)
-    tgt_detector = init_model(net=Detector(),
-                                restore=params.src_classifier_restore)
+    src_detector = init_model(net=Detector())
+    tgt_detector = init_model(net=Detector())
     # train source detector
     print("=== Training detector for source domain ===")
     print(">>> Source Detector <<<")
