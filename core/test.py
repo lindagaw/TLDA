@@ -71,13 +71,11 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
         valid_labels = []
         for origin, result, label in zip(src_or_tgt, pred_cls, labels):
             if not origin == 2:
-                print(result)
-                print(label)
-                valid_preds.append(result[0])
-                valid_labels.append(label[0])
+                valid_preds.append(result.item())
+                valid_labels.append(label.item())
 
-        batch_acc = accuracy_score(y_true=valid_labels, y_pred=valid_preds)
-        print("Batch Acc = {:2%}".format(batch_acc))
+        batch_acc = accuracy_score(y_true=np.asarray(valid_labels), y_pred=np.asarray(valid_preds))
+        print("Batch Acc = {}".format(batch_acc))
 
     loss /= len(data_loader)
     acc /= len(data_loader.dataset)
