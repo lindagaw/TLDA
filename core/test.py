@@ -8,6 +8,7 @@ from utils import make_variable
 
 def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tgt_detector):
     """Evaluation for target encoder by source classifier on target dataset."""
+
     # set eval state for Dropout and BN layers
     src_encoder.eval()
     tgt_encoder.eval()
@@ -36,7 +37,7 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
             dist_src = torch.max(dist_src.squeeze())
             dist_tgt = torch.max(dist_src.squeeze())
 
-            print((dist_src, dist_tgt))
+            #print((dist_src, dist_tgt))
 
             if dist_src > dist_tgt and dist_src > 800:
                 src_or_tgt.append(0)
