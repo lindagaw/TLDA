@@ -76,13 +76,14 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
             if not origin == 2:
                 valid_preds.append(result.item())
                 valid_labels.append(label.item())
+                iteration += 1
 
         batch_acc = accuracy_score(y_true=np.asarray(valid_labels), y_pred=np.asarray(valid_preds))
         #print("Batch Acc = {}".format(batch_acc))
 
         acc += batch_acc
 
-        iteration += 1
+
 
     loss /= len(data_loader)
     acc /= iteration
