@@ -54,8 +54,6 @@ if __name__ == '__main__':
     print("=== Evaluating source detector for target domain ===")
     eval_detector(tgt_detector, tgt_data_loader_eval)
 
-    assert(not src_detector == tgt_detector)
-
     print("===================================================================")
     print("=== Start training the Discriminator, Encoders, and Classifiers ===")
     print("===================================================================")
