@@ -33,8 +33,9 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
         src_or_tgt = []
 
         for dist_src, dist_tgt in zip(dists_src, dists_tgt):
-            dist_src = torch.max(dist_src.squeeze_())
-            dist_tgt = torch.max(dist_src.squeeze_())
+            print(dist_src.shape)
+            dist_src = torch.max(dist_src)
+            dist_tgt = torch.max(dist_src)
             if dist_src < dist_tgt:
                 src_or_tgt.append(1)
             else:
