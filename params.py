@@ -13,14 +13,14 @@ image_size = 64
 src_dataset = "MNIST"
 src_encoder_restore = "snapshots/ADDA-source-encoder-final.pt"
 src_classifier_restore = "snapshots/ADDA-source-classifier-final.pt"
-src_detector_restore = "snapshots/ADDA-source-detector-final.pt"
+src_detector_restore = "snapshots/" + src_dataset + "-detector-final.pt"
 src_model_trained = True
 src_detector_restore = False
 
 # params for target dataset
 tgt_dataset = "USPS"
 tgt_encoder_restore = "snapshots/ADDA-target-encoder-final.pt"
-src_detector_restore = "snapshots/ADDA-target-detector-final.pt"
+tgt_detector_restore = "snapshots/" + tgt_dataset + "-detector-final.pt"
 tgt_model_trained = True
 src_detector_restore = False
 
@@ -33,7 +33,7 @@ d_model_restore = "snapshots/ADDA-critic-final.pt"
 
 # params for training network
 num_gpu = 1
-num_epochs_pre = 6
+num_epochs_pre = 100
 log_step_pre = 20
 eval_step_pre = 20
 save_step_pre = 100

@@ -23,16 +23,16 @@ if __name__ == '__main__':
 
     # load models
     src_encoder = init_model(net=LeNetEncoder(),
-                             restore=None)
+                             restore=params.src_encoder_restore)
     src_classifier = init_model(net=LeNetClassifier(),
-                                restore=None)
+                                restore=params.src_classifier_restore)
 
     tgt_encoder = init_model(net=LeNetEncoder(),
-                             restore=None)
+                             restore=params.tgt_encoder_restore)
     critic = init_model(Discriminator(input_dims=params.d_input_dims,
                                       hidden_dims=params.d_hidden_dims,
                                       output_dims=params.d_output_dims),
-                        restore=None)
+                        restore=params.d_model_restore)
 
     src_detector = init_model(net=Detector(),
                                 restore=None)
