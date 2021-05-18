@@ -52,9 +52,7 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
             else:
                 preds.append(pred_tgt_encoder)
 
-
-        print(preds)
-        #preds = torch.tensor(preds)
+        preds = torch.Tensor(preds)
 
         loss += criterion(preds, labels).data[0]
 
