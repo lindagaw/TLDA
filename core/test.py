@@ -47,6 +47,10 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
 
         for origin, pred_src_encoder, pred_tgt_encoder in zip (src_or_tgt, \
                                     preds_src_encoder, preds_tgt_encoder):
+
+            pred_src_encoder = torch.unsqueeze(pred_src_encoder)
+            pred_tgt_encoder = torch.unsqueeze(pred_tgt_encoder)
+            
             if origin == 0:
                 if initialized == False:
                     preds = pred_src_encoder
