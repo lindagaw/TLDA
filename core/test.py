@@ -85,7 +85,7 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
         iteration += 1
 
     loss /= len(data_loader)
-    acc /= iteration()
+    acc /= iteration
     #acc /= len(data_loader.dataset)
 
     print("Avg Loss = {}, Avg Accuracy = {:2%}".format(loss, acc))
