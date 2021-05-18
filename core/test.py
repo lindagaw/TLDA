@@ -1,5 +1,5 @@
 """Test script to classify target data."""
-
+import numpy as np
 import torch
 import torch.nn as nn
 
@@ -43,26 +43,18 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
         preds_src_encoder = classifier(src_encoder(images))
         preds_tgt_encoder = classifier(tgt_encoder(images))
 
-        initialized = False
+        preds = []
 
         for origin, pred_src_encoder, pred_tgt_encoder in zip (src_or_tgt, \
                                     preds_src_encoder, preds_tgt_encoder):
-
-            pred_src_encoder = torch.unsqueeze(pred_src_encoder, dim=0)
-            pred_tgt_encoder = torch.unsqueeze(pred_tgt_encoder, dim=0)
-
+            pred_src_encoder = np.asarray(pred_src_encoder)
+            pred_tgt_encoder = np.asarray(pred_tgt_encoder)
             if origin == 0:
-                if initialized == False:
-                    preds = pred_src_encoder
-                    initialized = True
-                else:
-                    preds = torch.stack((preds, pred_src_encoder))
+                preds.append(pred_src_encoder)
             else:
-                if initialized == False:
-                    preds = pred_tgt_encoder
-                    initialized = True
-                else:
-                    preds = torch.stack((preds, pred_tgt_encoder))
+                preds.append(pred_tgt_encoder)
+
+        preds = torch.Tensor(np.asarray(preds))
 
         loss += criterion(preds, labels).data[0]
 
