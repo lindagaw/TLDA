@@ -43,16 +43,22 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
         preds_src_encoder = classifier(src_encoder(images))
         preds_tgt_encoder = classifier(tgt_encoder(images))
 
-        preds = []
+        initialized = False
 
         for origin, pred_src_encoder, pred_tgt_encoder in zip (src_or_tgt, \
                                     preds_src_encoder, preds_tgt_encoder):
             if origin == 0:
-                preds.append(pred_src_encoder)
+                if initialized == False:
+                    preds = pred_src_encoder
+                    initialized = True
+                else:
+                    preds = torch.stack(preds + pred_src_encoder)
             else:
-                preds.append(pred_tgt_encoder)
-
-        preds = torch.Tensor(preds)
+                if initialized == False:
+                    preds = pred_tgt_encoder
+                    initialized = True
+                else:
+                    preds = torch.stack(preds + pred_tgt_encoder)
 
         loss += criterion(preds, labels).data[0]
 
