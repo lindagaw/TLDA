@@ -98,5 +98,7 @@ if __name__ == '__main__':
     print("=== Evaluating classifier for encoded target domain ===")
     print(">>> only source detector <<<")
     eval_tgt(src_encoder, tgt_encoder, src_classifier, tgt_data_loader_eval, src_detector, src_detector)
+    print(">>> only target detector <<<")
+    eval_tgt(src_encoder, tgt_encoder, src_classifier, tgt_data_loader_eval, tgt_detector, tgt_detector)
     print(">>> source and target detectors <<<")
     eval_tgt(src_encoder, tgt_encoder, src_classifier, tgt_data_loader_eval, src_detector, tgt_detector)

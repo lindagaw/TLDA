@@ -40,7 +40,7 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
             dist_src = torch.max(dist_src.squeeze())
             dist_tgt = torch.max(dist_tgt.squeeze())
 
-            if dist_src > 800 and dist_tgt < 4:
+            if dist_src > dist_tgt:
                 src_or_tgt.append(0)
             else:
                 src_or_tgt.append(1)
@@ -60,8 +60,6 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
                 preds.append(pred_src_encoder)
 
         preds = torch.Tensor(np.asarray(preds)).cuda()
-
-        print(preds)
 
         loss += criterion(preds, labels).data
 
