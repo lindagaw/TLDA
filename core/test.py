@@ -44,9 +44,9 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
             dist_src = torch.max(dist_src.squeeze())
             dist_tgt = torch.max(dist_tgt.squeeze())
 
-            if dist_src > 1000:
+            if dist_src > 1400:
                 src_or_tgt.append(0)
-            elif dist_tgt > 4:
+            elif dist_tgt > 8:
                 src_or_tgt.append(1)
             else:
                 src_or_tgt.append(2)
