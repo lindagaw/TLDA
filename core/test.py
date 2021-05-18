@@ -22,10 +22,7 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
     # set loss function
     criterion = nn.CrossEntropyLoss()
 
-    in_distribution = 0
-
     # evaluate network
-    iteration = 0
     for (images, labels) in data_loader:
 
 
@@ -76,17 +73,11 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
             if not origin == 2:
                 valid_preds.append(result.item())
                 valid_labels.append(label.item())
-                iteration += 1
 
         batch_acc = accuracy_score(y_true=np.asarray(valid_labels), y_pred=np.asarray(valid_preds))
-        #print("Batch Acc = {}".format(batch_acc))
-
-        acc += batch_acc
-
-
+        print("Batch Acc = {}".format(batch_acc))
 
     loss /= len(data_loader)
-    acc /= iteration
-    #acc /= len(data_loader.dataset)
+    acc /= len(data_loader.dataset)
 
     print("Avg Loss = {}, Avg Accuracy = {:2%}".format(loss, acc))
