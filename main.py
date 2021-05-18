@@ -22,11 +22,6 @@ if __name__ == '__main__':
     tgt_data_loader_eval = get_data_loader(params.tgt_dataset, train=False)
 
     # load models
-    src_encoder = init_model(net=LeNetEncoder(),
-                             restore=params.src_encoder_restore)
-    src_classifier = init_model(net=LeNetClassifier(),
-                                restore=params.src_classifier_restore)
-
     tgt_encoder = init_model(net=LeNetEncoder(),
                              restore=params.tgt_encoder_restore)
     critic = init_model(Discriminator(input_dims=params.d_input_dims,
@@ -38,7 +33,8 @@ if __name__ == '__main__':
                                 restore=None)
     tgt_detector = init_model(net=Detector(),
                                 restore=None)
-'''
+
+
     # train source detector
     print("=== Training detector for source domain ===")
     print(">>> Source Detector <<<")
@@ -64,6 +60,10 @@ if __name__ == '__main__':
     print("===================================================================")
 
     # train source model
+    src_encoder = init_model(net=LeNetEncoder(),
+                             restore=params.src_encoder_restore)
+    src_classifier = init_model(net=LeNetClassifier(),
+                                restore=params.src_classifier_restore)
     print("=== Training classifier for source domain ===")
     print(">>> Source Encoder <<<")
     print(src_encoder)
@@ -101,4 +101,3 @@ if __name__ == '__main__':
     eval_tgt(src_encoder, src_classifier, tgt_data_loader_eval)
     print(">>> domain adaption <<<")
     eval_tgt(tgt_encoder, src_classifier, tgt_data_loader_eval)
-'''
