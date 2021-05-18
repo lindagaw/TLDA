@@ -38,6 +38,7 @@ if __name__ == '__main__':
                                 restore=None)
     tgt_detector = init_model(net=Detector(),
                                 restore=None)
+'''
     # train source detector
     print("=== Training detector for source domain ===")
     print(">>> Source Detector <<<")
@@ -100,3 +101,4 @@ if __name__ == '__main__':
     eval_tgt(src_encoder, src_classifier, tgt_data_loader_eval)
     print(">>> domain adaption <<<")
     eval_tgt(tgt_encoder, src_classifier, tgt_data_loader_eval)
+'''
