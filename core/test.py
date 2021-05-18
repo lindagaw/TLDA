@@ -25,7 +25,10 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
     in_distribution = 0
 
     # evaluate network
+    iteration = 0
     for (images, labels) in data_loader:
+
+
         images = make_variable(images, volatile=True)
         labels = make_variable(labels).squeeze_()
 
@@ -75,9 +78,14 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
                 valid_labels.append(label.item())
 
         batch_acc = accuracy_score(y_true=np.asarray(valid_labels), y_pred=np.asarray(valid_preds))
-        print("Batch Acc = {}".format(batch_acc))
+        #print("Batch Acc = {}".format(batch_acc))
+
+        acc += batch_acc
+
+        iteration += 1
 
     loss /= len(data_loader)
-    acc /= len(data_loader.dataset)
+    acc /= iteration()
+    #acc /= len(data_loader.dataset)
 
     print("Avg Loss = {}, Avg Accuracy = {:2%}".format(loss, acc))
