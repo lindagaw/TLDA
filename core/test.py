@@ -54,10 +54,10 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
                                     preds_src_encoder, preds_tgt_encoder):
             pred_src_encoder = pred_src_encoder.cpu().detach().numpy()
             pred_tgt_encoder = pred_tgt_encoder.cpu().detach().numpy()
-            if origin == 0:
-                preds.append(pred_src_encoder)
-            else:
+            if origin == 1:
                 preds.append(pred_tgt_encoder)
+            else:
+                preds.append(pred_src_encoder)
 
         preds = torch.Tensor(np.asarray(preds)).cuda()
 
