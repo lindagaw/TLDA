@@ -35,10 +35,12 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
         for dist_src, dist_tgt in zip(dists_src, dists_tgt):
             dist_src = torch.max(dist_src)
             dist_tgt = torch.max(dist_src)
-            if dist_src < dist_tgt:
+            if dist_src < dist_tgt and dist_tgt > 0.9:
                 src_or_tgt.append(1)
-            else:
+            elif dist_src > dist_tgt and dist_src > 0.9:
                 src_or_tgt.append(0)
+            else:
+                continue
 
         preds_src_encoder = classifier(src_encoder(images))
         preds_tgt_encoder = classifier(tgt_encoder(images))
