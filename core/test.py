@@ -48,9 +48,9 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
             dist_tgt = torch.max(dist_tgt.squeeze())
 
             print((dist_src, dist_tgt))
-            if dist_src > -10:
+            if dist_src > -20:
                 src_or_tgt.append(0)
-            elif dist_tgt > -4:
+            elif dist_tgt > -8:
                 src_or_tgt.append(1)
             else:
                 src_or_tgt.append(2)
@@ -82,7 +82,10 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
                 valid_preds.append(result.item())
                 valid_labels.append(label.item())
 
-        batch_acc += accuracy_score(y_true=np.asarray(valid_labels), y_pred=np.asarray(valid_preds))
+        if accuracy_score(y_true=np.asarray(valid_labels), y_pred=np.asarray(valid_preds)) == 'nan':
+            batch_acc += 0
+        else:
+            batch_acc += accuracy_score(y_true=np.asarray(valid_labels), y_pred=np.asarray(valid_preds))
         print("Batch Acc = {}".format(batch_acc))
 
     loss /= len(data_loader)
