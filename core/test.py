@@ -83,7 +83,7 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
                 valid_labels.append(label.item())
 
         if accuracy_score(y_true=np.asarray(valid_labels), y_pred=np.asarray(valid_preds)) == 'nan':
-            batch_acc += 0
+            continue
         else:
             batch_acc += accuracy_score(y_true=np.asarray(valid_labels), y_pred=np.asarray(valid_preds))
         print("Batch Acc = {}".format(batch_acc))
