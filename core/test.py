@@ -47,7 +47,7 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
             dist_src = torch.max(dist_src.squeeze())
             dist_tgt = torch.max(dist_tgt.squeeze())
 
-            #print((dist_src, dist_tgt))
+            print((dist_src, dist_tgt))
 
             if -7 > dist_tgt > -12:
                 src_or_tgt.append(1)
