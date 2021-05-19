@@ -10,7 +10,7 @@ batch_size = 50
 image_size = 64
 
 # params for source dataset
-src_dataset = "USPS"
+src_dataset = "SVHN"
 src_encoder_restore = "snapshots/ADDA-source-encoder-final.pt"
 src_classifier_restore = "snapshots/ADDA-source-classifier-final.pt"
 src_detector_restore = "snapshots/" + src_dataset + "-detector-final.pt"
