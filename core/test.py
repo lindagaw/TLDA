@@ -32,7 +32,7 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
 
     # evaluate network
     for (images, labels) in data_loader:
-        batch += 1
+
 
 
         images = make_variable(images, volatile=True)
@@ -91,6 +91,7 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
         else:
             batch_acc = accuracy_score(y_true=np.asarray(valid_labels), y_pred=np.asarray(valid_preds))
             total_acc += batch_acc
+            batch += 1
 
         #print("Batch Acc = {}".format(batch_acc))
 
