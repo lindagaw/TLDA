@@ -90,7 +90,10 @@ def eval_src(encoder, classifier, data_loader):
         labels = make_variable(labels)
 
         preds = classifier(encoder(images))
-        loss += criterion(preds, labels).data
+        try:
+            loss += criterion(preds, labels).data
+        except:
+            loss = criterion(preds, torch.max(labels, 1)[1]).data
 
         pred_cls = preds.data.max(1)[1]
         acc += pred_cls.eq(labels.data).cpu().sum()
