@@ -48,8 +48,8 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
             dist_tgt = torch.max(dist_tgt.squeeze())
 
             print((dist_src, dist_tgt))
-
-            if -7 > dist_tgt > -12:
+            #
+            if -7 > dist_tgt > -9:
                 src_or_tgt.append(1)
             elif 9 > dist_src > -5:
                 src_or_tgt.append(0)
