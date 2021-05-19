@@ -22,6 +22,7 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
     loss = 0.0
     acc = 0.0
     batch_acc = 0.0
+    total_acc = 0.0
     batch = 0
 
     # set loss function
@@ -47,11 +48,11 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
             dist_src = torch.max(dist_src.squeeze())
             dist_tgt = torch.max(dist_tgt.squeeze())
 
-            print((dist_src, dist_tgt))
+            #print((dist_src, dist_tgt))
             #
-            if -7 > dist_tgt > -9:
+            if -7 > dist_tgt > -10:
                 src_or_tgt.append(1)
-            elif 9 > dist_src > -5:
+            elif 9 > dist_src > 4:
                 src_or_tgt.append(0)
             else:
                 src_or_tgt.append(2)
@@ -87,9 +88,11 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
             continue
         else:
             batch_acc = accuracy_score(y_true=np.asarray(valid_labels), y_pred=np.asarray(valid_preds))
+            total_acc += batch_acc
+
         print("Batch Acc = {}".format(batch_acc))
 
     loss /= len(data_loader)
     acc /= len(data_loader.dataset)
 
-    print("Avg Loss = {}, Avg Accuracy = {:2%}".format(loss, acc))
+    print("Avg Loss = {}, Avg Accuracy = {:2%}".format(loss, total_acc))
