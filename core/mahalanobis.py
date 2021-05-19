@@ -36,7 +36,10 @@ def train_detector(detector, data_loader):
             optimizer.zero_grad()
 
             # compute loss for critic
-            preds = detector(images)
+            try:
+                preds = detector(images)
+            except:
+                preds = detector(images[:,0,:,:])
             loss = criterion(preds, labels)
 
             # optimize source detector
