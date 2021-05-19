@@ -49,9 +49,9 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
 
             #print((dist_src, dist_tgt))
 
-            if -7 > dist_tgt:
+            if -7 > dist_tgt > -12:
                 src_or_tgt.append(1)
-            elif 10 > dist_src:
+            elif 9 > dist_src > -5:
                 src_or_tgt.append(0)
             else:
                 src_or_tgt.append(2)
