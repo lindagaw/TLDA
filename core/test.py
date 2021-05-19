@@ -15,15 +15,21 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
     tgt_encoder.eval()
     classifier.eval()
 
+    src_coeff = 0
+    tgt_coeff = 0
+
     # init loss and accuracy
     loss = 0.0
     acc = 0.0
+    batch_acc = 0.0
+    batch = 0
 
     # set loss function
     criterion = nn.CrossEntropyLoss()
 
     # evaluate network
     for (images, labels) in data_loader:
+        batch += 1
 
 
         images = make_variable(images, volatile=True)
@@ -41,7 +47,7 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
             dist_src = torch.max(dist_src.squeeze())
             dist_tgt = torch.max(dist_tgt.squeeze())
 
-            #print((dist_src, dist_tgt))
+            print((dist_src, dist_tgt))
             if dist_src > 2:
                 src_or_tgt.append(0)
             elif dist_tgt > 5:
@@ -76,10 +82,10 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
                 valid_preds.append(result.item())
                 valid_labels.append(label.item())
 
-        batch_acc = accuracy_score(y_true=np.asarray(valid_labels), y_pred=np.asarray(valid_preds))
+        batch_acc += accuracy_score(y_true=np.asarray(valid_labels), y_pred=np.asarray(valid_preds))
         print("Batch Acc = {}".format(batch_acc))
 
     loss /= len(data_loader)
     acc /= len(data_loader.dataset)
 
-    print("Avg Loss = {}, Avg Accuracy = {:2%}".format(loss, acc))
+    print("Avg Loss = {}, Avg Accuracy = {:2%}".format(loss, batch_acc/batch))
