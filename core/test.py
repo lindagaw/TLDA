@@ -86,10 +86,10 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
         if accuracy_score(y_true=np.asarray(valid_labels), y_pred=np.asarray(valid_preds)) == 'nan':
             continue
         else:
-            batch_acc += accuracy_score(y_true=np.asarray(valid_labels), y_pred=np.asarray(valid_preds))
+            batch_acc = accuracy_score(y_true=np.asarray(valid_labels), y_pred=np.asarray(valid_preds))
         print("Batch Acc = {}".format(batch_acc))
 
     loss /= len(data_loader)
     acc /= len(data_loader.dataset)
 
-    print("Avg Loss = {}, Avg Accuracy = {:2%}".format(loss, batch_acc/batch))
+    print("Avg Loss = {}, Avg Accuracy = {:2%}".format(loss, acc))
