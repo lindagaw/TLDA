@@ -39,7 +39,7 @@ def train_detector(detector, data_loader):
             try:
                 preds = detector(images)
             except:
-                preds = detector(images[:,0,:,:])
+                preds = detector(images[:,0,:,:].unsqueeze(1))
             loss = criterion(preds, labels)
 
             # optimize source detector
