@@ -15,7 +15,7 @@ def get_svhn(train):
                                           mean=params.dataset_mean,
                                           std=params.dataset_std)])
     pre_process =  transforms.Compose([transforms.ToTensor(), transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                         std=[0.229, 0.224, 0.225] )])])
+                         std=[0.229, 0.224, 0.225] )])
     # dataset and data loader
     svhn_dataset = datasets.SVHN(root=params.data_root,
                                    #train=train,
