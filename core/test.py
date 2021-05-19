@@ -4,6 +4,8 @@ from sklearn.metrics import accuracy_score
 import torch
 import torch.nn as nn
 
+import math
+
 from utils import make_variable
 
 
@@ -84,15 +86,15 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
                 valid_preds.append(result.item())
                 valid_labels.append(label.item())
 
-        if accuracy_score(y_true=np.asarray(valid_labels), y_pred=np.asarray(valid_preds)) == float("nan"):
+        if math.isnan(accuracy_score(y_true=np.asarray(valid_labels), y_pred=np.asarray(valid_preds))):
             continue
         else:
             batch_acc = accuracy_score(y_true=np.asarray(valid_labels), y_pred=np.asarray(valid_preds))
             total_acc += batch_acc
 
-        print("Batch Acc = {}".format(batch_acc))
+        #print("Batch Acc = {}".format(batch_acc))
 
     loss /= len(data_loader)
     acc /= len(data_loader.dataset)
 
-    print("Avg Loss = {}, Avg Accuracy = {:2%}".format(loss, total_acc))
+    print("Avg Loss = {}, Avg Accuracy = {:2%}".format(loss, total_acc/batch))
