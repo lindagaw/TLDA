@@ -41,7 +41,7 @@ def eval_tgt(src_encoder, tgt_encoder, classifier, data_loader, src_detector, tg
             dist_src = torch.max(dist_src.squeeze())
             dist_tgt = torch.max(dist_tgt.squeeze())
 
-            print((dist_src, dist_tgt))
+            #print((dist_src, dist_tgt))
             if dist_src > dist_tgt and dist_src > 2:
                 src_or_tgt.append(0)
             elif dist_tgt > dist_src and dist_tgt > 5:
