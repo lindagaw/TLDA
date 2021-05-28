@@ -6,6 +6,7 @@ from torch import nn
 
 import params
 from utils import make_variable
+from models import CORAL
 
 
 def train_tgt(src_encoder, tgt_encoder, critic,
@@ -20,7 +21,9 @@ def train_tgt(src_encoder, tgt_encoder, critic,
     critic.train()
 
     # setup criterion and optimizer
-    criterion = nn.CrossEntropyLoss()
+    criterion = CORAL()
+    #criterion = nn.CrossEntropyLoss()
+
     optimizer_tgt = optim.Adam(tgt_encoder.parameters(),
                                lr=params.c_learning_rate,
                                betas=(params.beta1, params.beta2))
