@@ -112,7 +112,7 @@ def CORAL(source, target):
     xct = xmt.t() @ xmt
 
     # frobenius norm between source and target
-    loss = torch.mean(torch.mul((xc - xct), (xc - xct)))
+    loss = torch.mean(torch.Tensor.float(torch.mul((xc - xct)), torch.Tensor.float((xc - xct))))
     loss = loss/(4*d*d)
 
     return loss
