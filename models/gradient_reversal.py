@@ -2,8 +2,8 @@
 
 import torch.nn.functional as F
 from torch import nn
-
-class GradReverse(Function):
+from pytorch_revgrad import RevGrad
+class GradReverse(F):
     def forward(self, x):
         return x
 
@@ -35,9 +35,10 @@ class GradientReversal(nn.Module):
             nn.Conv2d(20, 50, kernel_size=5),
             nn.Dropout2d(),
             nn.MaxPool2d(kernel_size=2),
-            nn.ReLU()
+            nn.ReLU(),
+            RevGrad()
         )
-        self.fc1_gradientReversal = grad_reverse(nn.Linear(50 * 4 * 4, 500))
+        self.fc1_gradientReversal = nn.Linear(50 * 4 * 4, 500)
         self.fc2_gradientReversal = nn.Linear(500, 10)
 
     def forward(self, input):
