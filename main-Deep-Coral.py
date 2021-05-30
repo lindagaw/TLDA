@@ -32,15 +32,15 @@ if __name__ == '__main__':
     print(">>> Source Coral <<<")
     print(src_coral)
 
-    if not os.path.isfile('snapshots//src-coral-final.pt'):
-        src_coral = train_coral(src_coral, src_data_loader)
+
+    src_coral = train_coral(src_coral, src_data_loader)
 
     # train target coral
     print("=== Training coral for target domain ===")
     print(">>> Target Coral <<<")
     print(tgt_coral)
-    if not os.path.isfile('snapshots//tgt-coral-final.pt'):
-        tgt_coral = train_coral(tgt_coral, tgt_data_loader)
+
+    tgt_coral = train_coral(tgt_coral, tgt_data_loader)
 
     # eval source model on source data
     print("=== Evaluating source coral for source domain ===")
@@ -50,6 +50,17 @@ if __name__ == '__main__':
     print("=== Evaluating target coral for target domain ===")
     eval_coral(tgt_coral, tgt_data_loader_eval)
 
+        print('=====================================================')
+        print('==================== TL/DA Magic ====================')
+        print('=====================================================')
+
+        print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+        # eval source model on target data
+        print('=====================================================')
+        print("=== Evaluating source baseline for target domain ===")
+        print("======= what happens when D-Coral is applied  =======")
+        print('=====================================================')
+
     # eval source model on target data
     print("=== Evaluating target coral for target domain ===")
-    eval_coral(source_coral, tgt_data_loader_eval)
+    eval_coral(src_coral, tgt_data_loader_eval)
