@@ -1,7 +1,7 @@
 """Pre-train coral for source dataset."""
 import torch.nn as nn
 import torch.optim as optim
-
+import torch
 import params
 from utils import make_variable, save_model
 
