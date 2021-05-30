@@ -41,7 +41,7 @@ def train_coral(coral, data_loader):
                 preds = coral(images)
             except:
                 preds = coral(images[:,0,:,:].unsqueeze(1))
-            loss = criterion(preds, labels)
+            loss = CORAL(preds, labels)
 
             # optimize source coral
             loss.backward()
@@ -108,7 +108,7 @@ def CORAL(source, target):
     xc = xm.t() @ xm
 
     # target covariance
-    xmt = torch.mean(target, 0, keepdim=True) - target
+    xmt = torch.mean(torch.Tensor.float(target), 0, keepdim=True) - target
     xct = xmt.t() @ xmt
 
     # frobenius norm between source and target
