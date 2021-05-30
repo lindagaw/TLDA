@@ -8,7 +8,7 @@ urllib.request.install_opener(opener)
 
 import params
 from core import eval_src, eval_tgt, train_src, train_tgt, train_baseline, eval_baseline
-from models import Discriminator, LeNetClassifier, LeNetEncoder, Baseline, CORAL
+from models import Discriminator, LeNetClassifier, LeNetEncoder, Baseline
 from utils import get_data_loader, init_model, init_random_seed
 
 if __name__ == '__main__':
