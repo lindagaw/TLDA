@@ -3,15 +3,7 @@
 import torch.nn.functional as F
 from torch import nn
 from pytorch_revgrad import RevGrad
-class GradReverse(F):
-    def forward(self, x):
-        return x
 
-    def backward(self, grad_output):
-        return (-grad_output)
-
-def grad_reverse(x):
-    return GradReverse()(x)
 
 class GradientReversal(nn.Module):
     """GradientReversal gradientReversalEncoder model for ADDA."""
