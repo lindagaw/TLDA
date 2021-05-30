@@ -1,5 +1,8 @@
 from .discriminator import Discriminator
-from .lenet import LeNetClassifier, LeNetEncoder, CORAL
+from .lenet import LeNetClassifier, LeNetEncoder
 from .detector import Detector
 
-__all__ = (LeNetClassifier, LeNetEncoder, Discriminator, Detector, CORAL)
+from .baseline import Baseline
+from .Deep_Coral import Coral
+
+__all__ = (LeNetClassifier, LeNetEncoder, Discriminator, Detector, Coral, Baseline)
