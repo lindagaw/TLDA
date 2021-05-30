@@ -50,6 +50,12 @@ if __name__ == '__main__':
     print("=== Evaluating target baseline for target domain ===")
     eval_baseline(tgt_baseline, tgt_data_loader_eval)
 
+    print('=====================================================')
+    print('==================== TL/DA Magic ====================')
+    print('=====================================================')
+
     # eval source model on target data
-    print("=== Evaluating target baseline for target domain ===")
-    eval_baseline(source_baseline, tgt_data_loader_eval)
+    print("=== Evaluating source baseline for target domain ===")
+    print("=== This is what happens if no TL/DA is applied  ===")
+    print("=== get source model's classification on target  ===")
+    eval_baseline(src_baseline, tgt_data_loader_eval)
