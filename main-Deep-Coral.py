@@ -50,16 +50,16 @@ if __name__ == '__main__':
     print("=== Evaluating target coral for target domain ===")
     eval_coral(tgt_coral, tgt_data_loader_eval)
 
-        print('=====================================================')
-        print('==================== TL/DA Magic ====================')
-        print('=====================================================')
+    print('=====================================================')
+    print('==================== TL/DA Magic ====================')
+    print('=====================================================')
 
-        print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
-        # eval source model on target data
-        print('=====================================================')
-        print("=== Evaluating source baseline for target domain ===")
-        print("======= what happens when D-Coral is applied  =======")
-        print('=====================================================')
+    print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+    # eval source model on target data
+    print('=====================================================')
+    print("=== Evaluating source baseline for target domain ===")
+    print("======= what happens when D-Coral is applied  =======")
+    print('=====================================================')
 
     # eval source model on target data
     print("=== Evaluating target coral for target domain ===")
