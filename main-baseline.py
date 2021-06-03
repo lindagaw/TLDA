@@ -6,7 +6,7 @@ opener = urllib.request.build_opener()
 opener.addheaders = [('User-agent', 'Mozilla/5.0')]
 urllib.request.install_opener(opener)
 
-import params_baseline as params
+import params
 from core import eval_src, eval_tgt, train_src, train_tgt, train_baseline, eval_baseline
 from models import Discriminator, LeNetClassifier, LeNetEncoder, Baseline
 from utils import get_data_loader, init_model, init_random_seed
