@@ -6,4 +6,7 @@ from .baseline import Baseline
 from .Deep_Coral import Coral
 from .gradient_reversal import GradientReversal
 
-__all__ = (LeNetClassifier, LeNetEncoder, Discriminator, Detector, Coral, Baseline, GradientReversal)
+from .lenet_half import LeNetHalfEncoder, LeNetHalfClassifier
+
+__all__ = (LeNetClassifier, LeNetEncoder, Discriminator, Detector, Coral, Baseline, GradientReversal, \
+            LeNetHalfEncoder, LeNetHalfClassifier)
