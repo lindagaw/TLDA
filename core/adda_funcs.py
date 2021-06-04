@@ -10,6 +10,7 @@ import math
 from utils import make_variable
 from utils import make_variable, save_model
 
+import os
 
 def train_src_encoder(encoder, classifier, data_loader):
     """Train classifier for source domain."""
