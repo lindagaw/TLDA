@@ -27,8 +27,9 @@ class LeNetHalfEncoder(nn.Module):
             #nn.Dropout2d(),
             #nn.MaxPool2d(kernel_size=2),
             #nn.ReLU()
+            nn.Flatten()
         )
-        self.fc1 = nn.Linear(50 * 4 * 4, 1800)
+        self.fc1 = nn.Linear(50 * 4 * 4, 500)
 
     def forward(self, input):
         """Forward the LeNetHalf."""
@@ -43,7 +44,7 @@ class LeNetHalfClassifier(nn.Module):
     def __init__(self):
         """Init LeNetHalf encoder."""
         super(LeNetHalfClassifier, self).__init__()
-        self.fc2 = nn.Linear(1800, 10)
+        self.fc2 = nn.Linear(500, 10)
 
     def forward(self, feat):
         """Forward the LeNetHalf classifier."""
