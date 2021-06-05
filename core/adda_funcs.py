@@ -250,8 +250,6 @@ def eval_tgt_encoder(tgt_encoder, classifier, data_loader):
         torch.no_grad()
 
         preds = classifier(tgt_encoder(images))
-
-        preds = torch.Tensor(preds).cuda()
         loss += criterion(preds, labels).data
         pred_cls = preds.data.max(1)[1]
         acc += pred_cls.eq(labels.data).cpu().sum()
