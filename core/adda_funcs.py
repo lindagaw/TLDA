@@ -248,10 +248,13 @@ def eval_tgt_encoder(tgt_encoder, classifier, data_loader):
         labels = make_variable(labels).squeeze_()
 
         torch.no_grad()
-
         preds = classifier(tgt_encoder(images))
         loss += criterion(preds, labels).data
+
         pred_cls = preds.data.max(1)[1]
+
+        print(pred_cls)
+
         acc += pred_cls.eq(labels.data).cpu().sum()
 
 
