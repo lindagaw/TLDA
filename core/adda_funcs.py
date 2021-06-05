@@ -11,6 +11,7 @@ from utils import make_variable
 from utils import make_variable, save_model
 
 import os
+from sklearn.metrics import accuracy_score
 
 def train_src_encoder(encoder, classifier, data_loader):
     """Train classifier for source domain."""
@@ -235,6 +236,9 @@ def eval_tgt_encoder(tgt_encoder, classifier, data_loader):
     tgt_encoder.eval()
     classifier.eval()
 
+    predicted_labels = []
+    true_labels = []
+
     # init loss and accuracy
     loss = 0.0
     acc = 0.0
@@ -253,12 +257,13 @@ def eval_tgt_encoder(tgt_encoder, classifier, data_loader):
 
         pred_cls = preds.data.max(1)[1]
 
-        print(pred_cls)
-
-        acc += pred_cls.eq(labels.data).cpu().sum()
+        print(labels)
+        predicted_labels += pred_cls.cpu().numpy().tolist()
+        true_labels += labels.cpu().numpy().tolist()
+        #acc += pred_cls.eq(labels.data).cpu().sum()
 
 
     loss /= len(data_loader)
     acc /= len(data_loader.dataset)
 
-    print("Avg Loss = {}, Avg Accuracy = {:2%}".format(loss, acc))
+    print("Avg Loss = {}, Avg Accuracy = {:2%}".format(loss, accuracy_score(y_true=true_labels, y_pred=predicted_labels)))
