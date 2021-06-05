@@ -232,34 +232,24 @@ def eval_tgt_encoder(tgt_encoder, classifier, data_loader):
     """Evaluation for target encoder by source classifier on target dataset."""
 
     # set eval state for Dropout and BN layers
-    src_encoder.eval()
     tgt_encoder.eval()
     classifier.eval()
 
-    src_coeff = 0
-    tgt_coeff = 0
     # init loss and accuracy
     loss = 0.0
     acc = 0.0
-    batch_acc = 0.0
-    total_acc = 0.0
-    batch = 0
 
     # set loss function
     criterion = nn.CrossEntropyLoss()
 
     # evaluate network
     for (images, labels) in data_loader:
-
-
-
         images = make_variable(images, volatile=True)
         labels = make_variable(labels).squeeze_()
 
         torch.no_grad()
 
         preds = classifier(tgt_encoder(images))
-
 
         preds = torch.Tensor(np.asarray(preds)).cuda()
         loss += criterion(preds, labels).data
