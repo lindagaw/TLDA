@@ -62,7 +62,7 @@ def train_src_encoder(encoder, classifier, data_loader):
 
         # eval model on test set
         if ((epoch + 1) % params.eval_step_pre == 0):
-            eval_src(encoder, classifier, data_loader)
+            eval_src_encoder(encoder, classifier, data_loader)
 
         # save model parameters
         if ((epoch + 1) % params.save_step_pre == 0):
