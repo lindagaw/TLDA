@@ -251,7 +251,7 @@ def eval_tgt_encoder(tgt_encoder, classifier, data_loader):
 
         preds = classifier(tgt_encoder(images))
 
-        preds = torch.Tensor(np.asarray(preds)).cuda()
+        preds = torch.Tensor(preds).cuda()
         loss += criterion(preds, labels).data
         pred_cls = preds.data.max(1)[1]
         acc += pred_cls.eq(labels.data).cpu().sum()
@@ -260,4 +260,4 @@ def eval_tgt_encoder(tgt_encoder, classifier, data_loader):
     loss /= len(data_loader)
     acc /= len(data_loader.dataset)
 
-    print("Avg Loss = {}, Avg Accuracy = {:2%}".format(loss, total_acc/batch))
+    print("Avg Loss = {}, Avg Accuracy = {:2%}".format(loss, acc))
