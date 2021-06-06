@@ -271,7 +271,7 @@ def eval_ADDA(src_encoder, tgt_encoder, classifier, critic, data_loader):
         labels = make_variable(labels).squeeze_()
         torch.no_grad()
 
-        group = critic(tgt_encoder(images))
+        group = critic(src_encoder(images))
 
         print(group)
 
