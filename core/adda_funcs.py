@@ -271,11 +271,15 @@ def eval_ADDA(src_encoder, tgt_encoder, classifier, critic, data_loader):
         labels = make_variable(labels).squeeze_()
         torch.no_grad()
         
-        for group in critic(src_encoder(images)):
-            print(np.argmax(group.detach().cpu().numpy()))
+        #for group in critic(src_encoder(images)):
+        #    print(np.argmax(group.detach().cpu().numpy()))
 
         preds = classifier(tgt_encoder(images))
         loss += criterion(preds, labels).data
+
+        print(preds)
+        print(labels)
+        print('------------------------')
 
         pred_cls = preds.data.max(1)[1]
         acc += pred_cls.eq(labels.data).cpu().sum()
