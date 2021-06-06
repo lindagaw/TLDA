@@ -255,13 +255,9 @@ def eval_tgt_encoder(tgt_encoder, classifier, data_loader):
 
 
 def eval_ADDA(src_encoder, tgt_encoder, classifier, critic, data_loader):
+    """Evaluation for target encoder by source classifier on target dataset."""
     tgt_encoder.eval()
     classifier.eval()
-    src_encoder.eval()
-    critic.eval()
-
-    y_true = []
-    y_pred = []
     # init loss and accuracy
     loss = 0.0
     acc = 0.0
@@ -272,21 +268,11 @@ def eval_ADDA(src_encoder, tgt_encoder, classifier, critic, data_loader):
         images = make_variable(images, volatile=True)
         labels = make_variable(labels).squeeze_()
         torch.no_grad()
-        
-        #for group in critic(src_encoder(images)):
-        #    print(np.argmax(group.detach().cpu().numpy()))
-
         preds = classifier(tgt_encoder(images))
         loss += criterion(preds, labels).data
 
-        for pred, label in zip(preds, labels):
-            y_true.append(label.detach().cpu().numpy())
-            y_pred.append(np.argmax(pred.detach().cpu().numpy()))
-
         pred_cls = preds.data.max(1)[1]
         acc += pred_cls.eq(labels.data).cpu().sum()
-
     loss /= len(data_loader)
-    #acc /= len(data_loader.dataset)
-    acc = accuracy_score(y_true, y_pred)
+    acc /= len(data_loader.dataset)
     print("Avg Loss = {}, Avg Accuracy = {:2%}".format(loss, acc))

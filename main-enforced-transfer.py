@@ -68,6 +68,8 @@ if __name__ == '__main__':
             params.tgt_model_trained):
         tgt_encoder = train_tgt_encoder(src_encoder, tgt_encoder, critic,
                                 src_data_loader, tgt_data_loader)
+    tgt_encoder, tgt_classifier = train_src_encoder(
+        tgt_encoder, src_classifier, tgt_data_loader)
 
     # eval target encoder on test set of target dataset
     print("=== Evaluating classifier for encoded target domain ===")
@@ -77,4 +79,4 @@ if __name__ == '__main__':
     print(">>> only target encoder <<<")
     eval_tgt_encoder(tgt_encoder, src_classifier, tgt_data_loader_eval)
     print(">>> only target encoder <<<")
-    eval_ADDA(src_encoder, tgt_encoder, src_classifier, critic, tgt_data_loader_eval)
+    eval_ADDA(src_encoder, tgt_encoder, tgt_classifier, critic, tgt_data_loader_eval)
