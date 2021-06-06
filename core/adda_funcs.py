@@ -231,32 +231,57 @@ def eval_src_encoder(encoder, classifier, data_loader):
 
 def eval_tgt_encoder(tgt_encoder, classifier, data_loader):
     """Evaluation for target encoder by source classifier on target dataset."""
-
     # set eval state for Dropout and BN layers
     tgt_encoder.eval()
     classifier.eval()
-
     # init loss and accuracy
     loss = 0.0
     acc = 0.0
-
     # set loss function
     criterion = nn.CrossEntropyLoss()
-
     # evaluate network
     for (images, labels) in data_loader:
         images = make_variable(images, volatile=True)
         labels = make_variable(labels).squeeze_()
-
         torch.no_grad()
         preds = classifier(tgt_encoder(images))
         loss += criterion(preds, labels).data
 
         pred_cls = preds.data.max(1)[1]
         acc += pred_cls.eq(labels.data).cpu().sum()
+    loss /= len(data_loader)
+    acc /= len(data_loader.dataset)
+    print("Avg Loss = {}, Avg Accuracy = {:2%}".format(loss, acc))
 
+
+def eval_ADDA(src_encoder, tgt_encoder, src_classifier, tgt_classifier, critic, data_loader):
+    tgt_encoder.eval()
+    tgt_classifier.eval()
+    src_encoder.eval()
+    src_classifier.eval()
+    critic.eval()
+
+    # init loss and accuracy
+    loss = 0.0
+    acc = 0.0
+    # set loss function
+    criterion = nn.CrossEntropyLoss()
+    # evaluate network
+    for (images, labels) in data_loader:
+        images = make_variable(images, volatile=True)
+        labels = make_variable(labels).squeeze_()
+        torch.no_grad()
+
+        group = critic(tgt_encoder(images))
+
+        print(group)
+
+        preds = classifier(tgt_encoder(images))
+        loss += criterion(preds, labels).data
+
+        pred_cls = preds.data.max(1)[1]
+        acc += pred_cls.eq(labels.data).cpu().sum()
 
     loss /= len(data_loader)
     acc /= len(data_loader.dataset)
-
     print("Avg Loss = {}, Avg Accuracy = {:2%}".format(loss, acc))

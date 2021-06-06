@@ -7,7 +7,7 @@ opener.addheaders = [('User-agent', 'Mozilla/5.0')]
 urllib.request.install_opener(opener)
 
 import params
-from core import eval_src_encoder, eval_tgt_encoder, train_src_encoder, train_tgt_encoder
+from core import eval_src_encoder, eval_tgt_encoder, train_src_encoder, train_tgt_encoder, eval_ADDA
 from models import Discriminator, LeNetHalfClassifier, LeNetHalfEncoder
 from utils import get_data_loader, init_model, init_random_seed
 
@@ -71,8 +71,10 @@ if __name__ == '__main__':
 
     # eval target encoder on test set of target dataset
     print("=== Evaluating classifier for encoded target domain ===")
-    print(">>> only source detector <<<")
+    print(">>> only source encoder <<<")
     eval_tgt_encoder(src_encoder, src_classifier, tgt_data_loader_eval)
     #print(">>> only target detector <<<")
-    print(">>> source and target detectors <<<")
+    print(">>> only target encoder <<<")
     eval_tgt_encoder(tgt_encoder, src_classifier, tgt_data_loader_eval)
+    print(">>> only target encoder <<<")
+    eval_ADDA(src_encoder, tgt_encoder, src_classifier, tgt_classifier, critic, tgt_data_loader_eval)
