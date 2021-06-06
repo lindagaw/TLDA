@@ -254,11 +254,10 @@ def eval_tgt_encoder(tgt_encoder, classifier, data_loader):
     print("Avg Loss = {}, Avg Accuracy = {:2%}".format(loss, acc))
 
 
-def eval_ADDA(src_encoder, tgt_encoder, src_classifier, tgt_classifier, critic, data_loader):
+def eval_ADDA(src_encoder, tgt_encoder, classifier, critic, data_loader):
     tgt_encoder.eval()
-    tgt_classifier.eval()
+    classifier.eval()
     src_encoder.eval()
-    src_classifier.eval()
     critic.eval()
 
     # init loss and accuracy

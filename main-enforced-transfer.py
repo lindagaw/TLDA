@@ -77,4 +77,4 @@ if __name__ == '__main__':
     print(">>> only target encoder <<<")
     eval_tgt_encoder(tgt_encoder, src_classifier, tgt_data_loader_eval)
     print(">>> only target encoder <<<")
-    eval_ADDA(src_encoder, tgt_encoder, src_classifier, tgt_classifier, critic, tgt_data_loader_eval)
+    eval_ADDA(src_encoder, tgt_encoder, src_classifier, critic, tgt_data_loader_eval)
