@@ -343,7 +343,7 @@ def eval_ADDA(src_encoder, tgt_encoder, src_classifier, tgt_classifier, critic, 
             critic_at_src = critic(src_encoder(images)).detach().cpu().numpy()
             critic_at_tgt = critic(tgt_encoder(images)).detach().cpu().numpy()
 
-            if not np.argmax(critic_at_src) == np.argmax(critic_at_tgt):
+            if np.argmax(critic_at_src) == np.argmax(critic_at_tgt):
                 # out of distribution
                 continue
             else:
@@ -357,10 +357,9 @@ def eval_ADDA(src_encoder, tgt_encoder, src_classifier, tgt_classifier, critic, 
                 y_preds.append(y_pred)
                 y_trues.append(label.detach().cpu().numpy())
 
-                print('---------------------')
-                print(label.detach().cpu().numpy())
-                print(y_pred)
-                print('--------------------')
-
+                #print('---------------------')
+                #print(label.detach().cpu().numpy())
+                #print(y_pred)
+                #print('--------------------')
 
     print("Avg Accuracy = {:2%}".format(accuracy_score(y_true=y_trues, y_pred=y_preds)))
