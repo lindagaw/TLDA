@@ -338,21 +338,20 @@ def eval_ADDA(src_encoder, tgt_encoder, src_classifier, tgt_classifier, critic, 
 
         src_preds = src_classifier(src_encoder(images)).detach().cpu().numpy()
         tgt_preds = tgt_classifier(tgt_encoder(images)).detach().cpu().numpy()
+        critic_at_src = critic(src_encoder(images)).detach().cpu().numpy()
+        critic_at_tgt = critic(tgt_encoder(images)).detach().cpu().numpy()
 
-        for image, label, src_pred, tgt_pred in zip(images, labels, src_preds, tgt_preds):
-            critic_at_src = critic(src_encoder(images)).detach().cpu().numpy()
-            critic_at_tgt = critic(tgt_encoder(images)).detach().cpu().numpy()
+        for image, label, src_pred, tgt_pred, src_critic, tgt_critic \
+                        in zip(images, labels, src_preds, tgt_preds, critic_at_src, critic_at_tgt):
 
-            if np.argmax(critic_at_src) == np.argmax(critic_at_tgt):
+            if not src_critic == tgt_critic:
                 # out of distribution
                 continue
             else:
-                group = np.argmax(critic_at_src)
-                print('group ' + str(group))
-                if group == 0:
-                    y_pred = np.argmax(src_pred)
-                else:
+                if src_critic == 1 and tgt_critic == 1:
                     y_pred = np.argmax(tgt_pred)
+                else:
+                    y_pred = np.argmax(src_pred)
 
                 y_preds.append(y_pred)
                 y_trues.append(label.detach().cpu().numpy())
