@@ -7,7 +7,7 @@ opener.addheaders = [('User-agent', 'Mozilla/5.0')]
 urllib.request.install_opener(opener)
 
 import params
-from core import eval_src_encoder, eval_tgt_encoder, train_src_encoder, train_tgt_encoder, eval_ADDA
+from core import eval_src_encoder, eval_tgt_encoder, train_src_encoder, train_tgt_encoder, eval_ADDA, train_tgt_classifier
 from models import Discriminator, LeNetHalfClassifier, LeNetHalfEncoder
 from utils import get_data_loader, init_model, init_random_seed
 
@@ -24,6 +24,10 @@ if __name__ == '__main__':
     # load models
     tgt_encoder = init_model(net=LeNetHalfEncoder(),
                              restore=params.tgt_encoder_restore)
+
+    tgt_classifier = init_model(net=LeNetHalfClassifier(),
+                                restore=params.src_classifier_restore)
+
     critic = init_model(Discriminator(input_dims=params.d_input_dims,
                                       hidden_dims=params.d_hidden_dims,
                                       output_dims=params.d_output_dims),
@@ -68,15 +72,13 @@ if __name__ == '__main__':
             params.tgt_model_trained):
         tgt_encoder = train_tgt_encoder(src_encoder, tgt_encoder, critic,
                                 src_data_loader, tgt_data_loader)
-    tgt_encoder, tgt_classifier = train_src_encoder(
-        tgt_encoder, src_classifier, tgt_data_loader)
+
+    tgt_encoder, tgt_classifier = train_tgt_classifier(
+        tgt_encoder, tgt_classifier, tgt_data_loader)
 
     # eval target encoder on test set of target dataset
     print("=== Evaluating classifier for encoded target domain ===")
     print(">>> only source encoder <<<")
     eval_tgt_encoder(src_encoder, src_classifier, tgt_data_loader_eval)
-    #print(">>> only target detector <<<")
-    print(">>> only target encoder <<<")
-    eval_tgt_encoder(tgt_encoder, src_classifier, tgt_data_loader_eval)
-    print(">>> only target encoder <<<")
-    eval_ADDA(src_encoder, tgt_encoder, tgt_classifier, critic, tgt_data_loader_eval)
+    print(">>> source + target encoders <<<")
+    eval_ADDA(src_encoder, tgt_encoder, src_classifier, tgt_classifier, critic, tgt_data_loader_eval)

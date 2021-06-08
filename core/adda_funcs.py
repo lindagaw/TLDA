@@ -13,6 +13,69 @@ from utils import make_variable, save_model
 import os
 from sklearn.metrics import accuracy_score
 
+def train_tgt_classifier(encoder, classifier, data_loader):
+    """Train classifier for source domain."""
+    ####################
+    # 1. setup network #
+    ####################
+
+    # set train state for Dropout and BN layers
+    encoder.train()
+    classifier.train()
+
+    # setup criterion and optimizer
+    optimizer = optim.Adam(
+        list(encoder.parameters()) + list(classifier.parameters()),
+        lr=params.c_learning_rate,
+        betas=(params.beta1, params.beta2))
+    criterion = nn.CrossEntropyLoss()
+
+    ####################
+    # 2. train network #
+    ####################
+
+    for epoch in range(params.num_epochs_pre):
+        for step, (images, labels) in enumerate(data_loader):
+            # make images and labels variable
+            images = make_variable(images)
+            labels = make_variable(labels.squeeze_())
+
+            # zero gradients for optimizer
+            optimizer.zero_grad()
+
+            # compute loss for critic
+            preds = classifier(encoder(images))
+            loss = criterion(preds, labels)
+
+            # optimize source classifier
+            loss.backward()
+            optimizer.step()
+
+            # print step info
+            if ((step + 1) % params.log_step_pre == 0):
+                print("Epoch [{}/{}] Step [{}/{}]: loss={}"
+                      .format(epoch + 1,
+                              params.num_epochs_pre,
+                              step + 1,
+                              len(data_loader),
+                              loss.data))
+
+        # eval model on test set
+        if ((epoch + 1) % params.eval_step_pre == 0):
+            eval_src_encoder(encoder, classifier, data_loader)
+
+        # save model parameters
+        if ((epoch + 1) % params.save_step_pre == 0):
+            save_model(encoder, "ADDA-target-encoder-{}.pt".format(epoch + 1))
+            save_model(
+                classifier, "ADDA-target-classifier-{}.pt".format(epoch + 1))
+
+    # # save final model
+    save_model(encoder, "ADDA-target-encoder-final.pt")
+    save_model(classifier, "ADDA-target-classifier-final.pt")
+
+    return encoder, classifier
+
 def train_src_encoder(encoder, classifier, data_loader):
     """Train classifier for source domain."""
     ####################
@@ -254,25 +317,50 @@ def eval_tgt_encoder(tgt_encoder, classifier, data_loader):
     print("Avg Loss = {}, Avg Accuracy = {:2%}".format(loss, acc))
 
 
-def eval_ADDA(src_encoder, tgt_encoder, classifier, critic, data_loader):
+def eval_ADDA(src_encoder, tgt_encoder, src_classifier, tgt_classifier, critic, data_loader):
     """Evaluation for target encoder by source classifier on target dataset."""
     tgt_encoder.eval()
-    classifier.eval()
+    src_encoder.eval()
+    src_classifier.eval()
+    tgt_classifier.eval()
     # init loss and accuracy
-    loss = 0.0
-    acc = 0.0
     # set loss function
     criterion = nn.CrossEntropyLoss()
     # evaluate network
+
+    y_trues = []
+    y_preds = []
+
     for (images, labels) in data_loader:
         images = make_variable(images, volatile=True)
         labels = make_variable(labels).squeeze_()
         torch.no_grad()
-        preds = classifier(tgt_encoder(images))
-        loss += criterion(preds, labels).data
 
-        pred_cls = preds.data.max(1)[1]
-        acc += pred_cls.eq(labels.data).cpu().sum()
-    loss /= len(data_loader)
-    acc /= len(data_loader.dataset)
-    print("Avg Loss = {}, Avg Accuracy = {:2%}".format(loss, acc))
+        src_preds = src_classifier(src_encoder(images)).detach().cpu().numpy()
+        tgt_preds = tgt_classifier(tgt_encoder(images)).detach().cpu().numpy()
+
+        for image, label, src_pred, tgt_pred in zip(images, labels, src_preds, tgt_preds):
+            critic_at_src = critic(src_encoder(images)).detach().cpu().numpy()
+            critic_at_tgt = critic(tgt_encoder(images)).detach().cpu().numpy()
+
+            if not np.argmax(critic_at_src) == np.argmax(critic_at_tgt):
+                # out of distribution
+                continue
+            else:
+                group = np.argmax(critic_at_src)
+                print('group ' + str(group))
+                if group == 0:
+                    y_pred = np.argmax(src_pred)
+                else:
+                    y_pred = np.argmax(tgt_pred)
+
+                y_preds.append(y_pred)
+                y_trues.append(label.detach().cpu().numpy())
+
+                print('---------------------')
+                print(label.detach().cpu().numpy())
+                print(y_pred)
+                print('--------------------')
+
+
+    print("Avg Accuracy = {:2%}".format(accuracy_score(y_true=y_trues, y_pred=y_preds)))

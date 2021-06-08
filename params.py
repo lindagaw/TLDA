@@ -10,7 +10,7 @@ batch_size = 50
 image_size = 64
 
 # params for source dataset
-src_dataset = "SVHN"
+src_dataset = "MNIST"
 src_encoder_restore = "snapshots/ADDA-source-encoder-final.pt"
 src_classifier_restore = "snapshots/ADDA-source-classifier-final.pt"
 src_detector_restore = "snapshots/" + src_dataset + "-detector-final.pt"
@@ -18,7 +18,7 @@ src_model_trained = True
 src_detector_restore = False
 
 # params for target dataset
-tgt_dataset = "MNIST"
+tgt_dataset = "USPS"
 tgt_encoder_restore = "snapshots/ADDA-target-encoder-final.pt"
 tgt_detector_restore = "snapshots/" + tgt_dataset + "-detector-final.pt"
 tgt_model_trained = True
@@ -33,11 +33,11 @@ d_model_restore = "snapshots/ADDA-critic-final.pt"
 
 # params for training network
 num_gpu = 4
-num_epochs_pre = 100
+num_epochs_pre = 10
 log_step_pre = 20
 eval_step_pre = 20
 save_step_pre = 100
-num_epochs = 2000
+num_epochs = 200
 log_step = 100
 save_step = 100
 manual_seed = None
