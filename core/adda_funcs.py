@@ -344,21 +344,19 @@ def eval_ADDA(src_encoder, tgt_encoder, src_classifier, tgt_classifier, critic, 
         for image, label, src_pred, tgt_pred, src_critic, tgt_critic \
                         in zip(images, labels, src_preds, tgt_preds, critic_at_src, critic_at_tgt):
 
-            if not np.argmax(src_critic) == np.argmax(tgt_critic):
-                # out of distribution
-                continue
-            else:
-                if np.argmax(src_critic) == 1 and np.argmax(tgt_critic) == 1:
-                    y_pred = np.argmax(tgt_pred)
-                else:
-                    y_pred = np.argmax(src_pred)
 
+            #if not np.argmax(src_critic) == np.argmax(tgt_critic):
+            #    # out of distribution
+            #    continue
+            #else:
+            #    if np.argmax(src_critic) == 1 and np.argmax(tgt_critic) == 1:
+            #        y_pred = np.argmax(tgt_pred)
+            #    else:
+            #        y_pred = np.argmax(src_pred)
+
+                y_pred = np.argmax(tgt_pred)
                 y_preds.append(y_pred)
                 y_trues.append(label.detach().cpu().numpy())
 
-                #print('---------------------')
-                #print(label.detach().cpu().numpy())
-                #print(y_pred)
-                #print('--------------------')
 
     print("Avg Accuracy = {:2%}".format(accuracy_score(y_true=y_trues, y_pred=y_preds)))
