@@ -344,16 +344,11 @@ def eval_ADDA(src_encoder, tgt_encoder, src_classifier, tgt_classifier, critic, 
         for image, label, src_pred, tgt_pred, src_critic, tgt_critic \
                         in zip(images, labels, src_preds, tgt_preds, critic_at_src, critic_at_tgt):
 
-            print('----------------')
-            print(src_critic)
-            print(tgt_critic)
-            print('----------------')
-
-            if not src_critic == tgt_critic:
+            if not np.argmax(src_critic) == np.argmax(tgt_critic):
                 # out of distribution
                 continue
             else:
-                if src_critic == 1 and tgt_critic == 1:
+                if np.argmax(src_critic) == 1 and np.argmax(tgt_critic) == 1:
                     y_pred = np.argmax(tgt_pred)
                 else:
                     y_pred = np.argmax(src_pred)
