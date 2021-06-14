@@ -9,7 +9,8 @@ urllib.request.install_opener(opener)
 import params
 from core import eval_src_encoder, eval_tgt_encoder, train_src_encoder, train_tgt_encoder, eval_ADDA, train_tgt_classifier
 from models import Discriminator, LeNetHalfClassifier, LeNetHalfEncoder
-from utils import get_data_loader, init_model, init_random_seed
+from utils import get_data_loader, init_model, init_random_seed, visualize_net
+
 
 if __name__ == '__main__':
     # init random seed
@@ -32,7 +33,6 @@ if __name__ == '__main__':
                                       hidden_dims=params.d_hidden_dims,
                                       output_dims=params.d_output_dims),
                         restore=params.d_model_restore)
-
 
 
     print("===================================================================")

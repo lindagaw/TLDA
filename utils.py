@@ -10,6 +10,28 @@ from torch.autograd import Variable
 import params
 from datasets import get_mnist, get_usps, get_kmnist, get_svhn
 
+from torchviz import make_dot, make_dot_from_trace
+
+def visualize_net(model, fname):
+
+    """Use the following line to ultilize this funciton: visualize_net(critic, "critic_net.gv")"""
+    
+    try:
+        x = torch.randn(1, 3, 28, 28).requires_grad_(True)
+        y = model(x)
+        pic = make_dot(y, params=dict(list(model.named_parameters()) + [('x', x)]))
+    except:
+        x = torch.randn(1, 500, 500).requires_grad_(True)
+        y = model(x)
+        pic = make_dot(y, params=dict(list(model.named_parameters()) + [('x', x)]))
+
+    print('Rendering the structure of given model to ' + fname + '...')
+    pic.render(filename=fname)
+
+    return pic
+    
+
+
 
 def make_variable(tensor, volatile=False):
     """Convert Tensor to Variable."""
