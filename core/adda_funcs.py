@@ -368,8 +368,8 @@ def is_in_distribution(vector, mahalanobis_mean, mahalanobis_std, mean, iv):
     upper_coefficient = 1
     lower_coefficient = 1
 
-    upper = mean + upper_coefficient * std
-    lower = mean - lower_coefficient * std
+    upper = mahalanobis_mean + upper_coefficient * mahalanobis_std
+    lower = mahalanobis_mean - lower_coefficient * mahalanobis_std
 
     mahalanobis = distance.mahalanobis(vector, mean, iv)
 
