@@ -327,7 +327,7 @@ def get_distribution(src_encoder, tgt_encoder, src_classifier, tgt_classifier, c
         print("Loading previously computed mahalanobis distances' mean and standard deviation ... ")
         mahalanobis_std = np.load('snapshots//' + which_data_loader + '_mahalanobis_std.npy')
         mahalanobis_mean = np.load('snapshots//' + which_data_loader + '_mahalanobis_mean.npy')
-        iv = np.load('snapshots//' + which_data_loader + '_inv.npy')
+        iv = np.load('snapshots//' + which_data_loader + '_iv.npy')
         mean = np.load('snapshots//' + which_data_loader + '_mean.npy')
 
     else:
