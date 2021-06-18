@@ -345,9 +345,12 @@ def get_distribution(src_encoder, tgt_encoder, src_classifier, tgt_classifier, c
             for image, label, src_pred, tgt_pred, src_critic, tgt_critic \
                             in zip(images, labels, src_preds, tgt_preds, critic_at_src, critic_at_tgt):
                 vectors.append(src_critic.tolist() + tgt_critic.tolist())
-                print('processing vector ' + str(src_critic.tolist() + tgt_critic.tolist()))                
+                print('processing vector ' + str(src_critic.tolist() + tgt_critic.tolist()))
+
         mean = np.asarray(vectors).mean(axis=0)
-        iv = np.linalg.inv(np.cov(vectors))
+        print(mean.shape)
+        cov = np.cov(vectors)
+        iv = np.linalg.inv(cov)
         mahalanobis = np.asarray([distance.mahalanobis(v, mean, iv) for v in vectors])
         mahalanobis_mean = np.mean(mahalanobis)
         mahalanobis_std = np.std(mahalanobis)
