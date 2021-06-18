@@ -365,8 +365,8 @@ def get_distribution(src_encoder, tgt_encoder, src_classifier, tgt_classifier, c
     return mahalanobis_mean, mahalanobis_std, iv, mean
 
 def is_in_distribution(vector, mahalanobis_mean, mahalanobis_std, mean, iv):
-    upper_coefficient = 0.5
-    lower_coefficient = 0.5
+    upper_coefficient = 1
+    lower_coefficient = 1
 
     upper = mahalanobis_mean + upper_coefficient * mahalanobis_std
     lower = mahalanobis_mean - lower_coefficient * mahalanobis_std
