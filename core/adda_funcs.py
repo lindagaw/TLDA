@@ -384,12 +384,12 @@ def eval_ADDA(src_encoder, tgt_encoder, src_classifier, tgt_classifier, critic, 
 
     src_mahalanobis_std = np.load('snapshots//' + 'src' + '_mahalanobis_std.npy')
     src_mahalanobis_mean = np.load('snapshots//' + 'src' + '_mahalanobis_mean.npy')
-    src_iv = np.load('snapshots//' + 'src' + '_inv.npy')
+    src_iv = np.load('snapshots//' + 'src' + '_iv.npy')
     src_mean = np.load('snapshots//' + 'src' + '_mean.npy')
 
     tgt_mahalanobis_std = np.load('snapshots//' + 'tgt' + '_mahalanobis_std.npy')
     tgt_mahalanobis_mean = np.load('snapshots//' + 'tgt' + '_mahalanobis_mean.npy')
-    tgt_iv = np.load('snapshots//' + 'tgt' + '_inv.npy')
+    tgt_iv = np.load('snapshots//' + 'tgt' + '_iv.npy')
     tgt_mean = np.load('snapshots//' + 'tgt' + '_mean.npy')
 
     """Evaluation for target encoder by source classifier on target dataset."""
