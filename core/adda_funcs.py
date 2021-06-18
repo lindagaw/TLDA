@@ -349,7 +349,10 @@ def get_distribution(src_encoder, tgt_encoder, src_classifier, tgt_classifier, c
 
         mean = np.asarray(vectors).mean(axis=0)
         cov = np.cov(vectors)
-        iv = np.linalg.inv(cov)
+        try:
+            iv = np.linalg.inv(cov)
+        except:
+            iv = cov
         mahalanobis = np.asarray([distance.mahalanobis(v, mean, iv) for v in vectors])
         mahalanobis_mean = np.mean(mahalanobis)
         mahalanobis_std = np.std(mahalanobis)
