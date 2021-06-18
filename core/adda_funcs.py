@@ -12,6 +12,7 @@ from utils import make_variable, save_model
 
 import os
 from sklearn.metrics import accuracy_score
+from scipy.spatial import distance
 
 def train_tgt_classifier(encoder, classifier, data_loader):
     """Train classifier for source domain."""
@@ -316,8 +317,75 @@ def eval_tgt_encoder(tgt_encoder, classifier, data_loader):
     acc /= len(data_loader.dataset)
     print("Avg Loss = {}, Avg Accuracy = {:2%}".format(loss, acc))
 
+def get_distribution(src_encoder, tgt_encoder, src_classifier, tgt_classifier, critic, data_loader, which_data_loader):
+
+    if os.path.isfile('snapshots//' + which_data_loader + '_mahalanobis_std.npy') and \
+        os.path.isfile('snapshots//' + which_data_loader + '_mahalanobis_mean.npy') and \
+        os.path.isfile('snapshots//' + which_data_loader + '_iv.npy') and \
+        os.path.isfile('snapshots//' + which_data_loader + '_mean.npy'):
+
+        print("Loading previously computed mahalanobis distances' mean and standard deviation ... ")
+        mahalanobis_std = np.load('snapshots//' + which_data_loader + '_mahalanobis_std.npy')
+        mahalanobis_mean = np.load('snapshots//' + which_data_loader + '_mahalanobis_mean.npy')
+        iv = np.load('snapshots//' + which_data_loader + '_inv.npy')
+        mean = np.load('snapshots//' + which_data_loader + '_mean.npy')
+
+    else:
+
+        print("Start calculating the mahalanobis distances' mean and standard deviation ... ")
+        vectors = []
+        for (images, labels) in data_loader:
+            images = make_variable(images, volatile=True)
+            labels = make_variable(labels).squeeze_()
+            torch.no_grad()
+            src_preds = src_classifier(src_encoder(images)).detach().cpu().numpy()
+            tgt_preds = tgt_classifier(tgt_encoder(images)).detach().cpu().numpy()
+            critic_at_src = critic(src_encoder(images)).detach().cpu().numpy()
+            critic_at_tgt = critic(tgt_encoder(images)).detach().cpu().numpy()
+            for image, label, src_pred, tgt_pred, src_critic, tgt_critic \
+                            in zip(images, labels, src_preds, tgt_preds, critic_at_src, critic_at_tgt):
+                vectors.append(src_critic.tolist() + tgt_critic.tolist())
+        mean = np.asarray(vectors).mean(axis=0)
+        iv = np.linalg.inv(np.cov(vectors))
+        mahalanobis = np.asarray([distance.mahalanobis(v, mean, iv) for v in vectors])
+        mahalanobis_mean = np.mean(mahalanobis)
+        mahalanobis_std = np.std(mahalanobis)
+        np.save('snapshots//' + which_data_loader + '_mahalanobis_mean.npy', mahalanobis_mean)
+        np.save('snapshots//' + which_data_loader + '_mahalanobis_std.npy', mahalanobis_std)
+        np.save('snapshots//' + which_data_loader + '_iv.npy', iv)
+        np.save('snapshots//' + which_data_loader + '_mean.npy', mean)
+
+    print("Finished obtaining the mahalanobis distances' mean and standard deviation on " + which_data_loader)
+    return mahalanobis_mean, mahalanobis_std, iv, mean
+
+def is_in_distribution(vector, mahalanobis_mean, mahalanobis_std, mean, iv):
+    upper_coefficient = 1
+    lower_coefficient = 1
+
+    upper = mean + upper_coefficient * std
+    lower = mean - lower_coefficient * std
+
+    mahalanobis = distance.mahalanobis(vector, mean, iv)
+
+    if lower < mahalanobis and mahalanobis < upper:
+        return True
+    else:
+        return False
+
+
 
 def eval_ADDA(src_encoder, tgt_encoder, src_classifier, tgt_classifier, critic, data_loader):
+
+    src_mahalanobis_std = np.load('snapshots//' + 'src' + '_mahalanobis_std.npy')
+    src_mahalanobis_mean = np.load('snapshots//' + 'src' + '_mahalanobis_mean.npy')
+    src_iv = np.load('snapshots//' + 'src' + '_inv.npy')
+    src_mean = np.load('snapshots//' + 'src' + '_mean.npy')
+
+    tgt_mahalanobis_std = np.load('snapshots//' + 'tgt' + '_mahalanobis_std.npy')
+    tgt_mahalanobis_mean = np.load('snapshots//' + 'tgt' + '_mahalanobis_mean.npy')
+    tgt_iv = np.load('snapshots//' + 'tgt' + '_inv.npy')
+    tgt_mean = np.load('snapshots//' + 'tgt' + '_mean.npy')
+
     """Evaluation for target encoder by source classifier on target dataset."""
     tgt_encoder.eval()
     src_encoder.eval()
@@ -344,14 +412,17 @@ def eval_ADDA(src_encoder, tgt_encoder, src_classifier, tgt_classifier, critic, 
         for image, label, src_pred, tgt_pred, src_critic, tgt_critic \
                         in zip(images, labels, src_preds, tgt_preds, critic_at_src, critic_at_tgt):
 
-            if np.argmax(np.asarray(src_critic)) == np.argmax(np.asarray(tgt_critic)):
-                # out of distribution
+            vector = src_critic.tolist() + tgt_critic.tolist()
+
+            # ouf of distribution:
+            if not is_in_distribution(vector, tgt_mahalanobis_mean, tgt_mahalanobis_std, tgt_mean, tgt_iv) \
+                and not is_in_distribution(vector, src_mahalanobis_mean, src_mahalanobis_std, src_mean, src_iv):
                 continue
+            # if in distribution which the target:
+            elif is_in_distribution(vector, tgt_mahalanobis_mean, tgt_mahalanobis_std, tgt_mean, tgt_iv):
+                y_pred = np.argmax(tgt_pred)
             else:
-                if np.argmax(src_critic) == 0 and np.argmax(tgt_critic) == 1:
-                    y_pred = np.argmax(tgt_pred)
-                else:
-                    y_pred = np.argmax(src_pred)
+                y_pred = np.argmax(src_pred)
 
             #y_pred = np.argmax(tgt_pred)
             y_preds.append(y_pred)
