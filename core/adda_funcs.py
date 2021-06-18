@@ -344,11 +344,10 @@ def get_distribution(src_encoder, tgt_encoder, src_classifier, tgt_classifier, c
             critic_at_tgt = critic(tgt_encoder(images)).detach().cpu().numpy()
             for image, label, src_pred, tgt_pred, src_critic, tgt_critic \
                             in zip(images, labels, src_preds, tgt_preds, critic_at_src, critic_at_tgt):
-                vectors.append(src_critic.tolist() + tgt_critic.tolist())
+                vectors.append(np.linalg.norm(src_critic.tolist() + tgt_critic.tolist()))
                 print('processing vector ' + str(src_critic.tolist() + tgt_critic.tolist()))
 
         mean = np.asarray(vectors).mean(axis=0)
-        print(mean.shape)
         cov = np.cov(vectors)
         iv = np.linalg.inv(cov)
         mahalanobis = np.asarray([distance.mahalanobis(v, mean, iv) for v in vectors])
@@ -416,7 +415,7 @@ def eval_ADDA(src_encoder, tgt_encoder, src_classifier, tgt_classifier, critic, 
         for image, label, src_pred, tgt_pred, src_critic, tgt_critic \
                         in zip(images, labels, src_preds, tgt_preds, critic_at_src, critic_at_tgt):
 
-            vector = src_critic.tolist() + tgt_critic.tolist()
+            vector = np.linalg.norm(src_critic.tolist() + tgt_critic.tolist())
 
             # ouf of distribution:
             if not is_in_distribution(vector, tgt_mahalanobis_mean, tgt_mahalanobis_std, tgt_mean, tgt_iv) \
