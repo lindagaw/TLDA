@@ -81,5 +81,8 @@ if __name__ == '__main__':
     print(">>> only source detector <<<")
     eval_tgt_encoder(src_encoder, src_classifier, tgt_data_loader_eval)
 
+    get_distribution(src_encoder, tgt_encoder, src_classifier, tgt_classifier, critic, src_data_loader, 'src')
+    get_distribution(src_encoder, tgt_encoder, src_classifier, tgt_classifier, critic, tgt_data_loader, 'tgt')
+
     print(">>> source + target encoders <<<")
     eval_ADDA(src_encoder, tgt_encoder, src_classifier, tgt_classifier, critic, tgt_data_loader_eval)
