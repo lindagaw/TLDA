@@ -8,6 +8,7 @@ urllib.request.install_opener(opener)
 
 import params
 from core import eval_src_encoder, eval_tgt_encoder, train_src_encoder, train_tgt_encoder, eval_ADDA, train_tgt_classifier
+from core import get_distribution
 from models import Discriminator, LeNetClassifier, LeNetEncoder
 from utils import get_data_loader, init_model, init_random_seed
 
