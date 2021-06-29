@@ -147,7 +147,7 @@ def is_in_distribution(sample, mean, inv, m_mean, m_std, m_coeff):
     if lower < m and m < upper:
         return True
     else:
-        return False
+        return True
 
 def eval_baseline_ood(baseline, tgt_data_loader, tgt_data_loader_eval):
     """Evaluate baseline for source domain."""
