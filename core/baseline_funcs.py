@@ -144,10 +144,15 @@ def is_in_distribution(sample, mean, inv, m_mean, m_std, m_coeff):
 
     m = np.linalg.norm((sample - mean) * inv * (sample - mean))
 
+    print(lower)
+    print(m_mean)
+    print(m)
+    print(upper)
+
     if lower < m and m < upper:
         return True
     else:
-        return True
+        return False
 
 def eval_baseline_ood(baseline, tgt_data_loader, tgt_data_loader_eval):
     """Evaluate baseline for source domain."""
@@ -175,7 +180,7 @@ def eval_baseline_ood(baseline, tgt_data_loader, tgt_data_loader_eval):
 
         for image, label, pred in zip(images, labels, predictions):
 
-            if is_in_distribution(image, mean, inv, m_mean, m_std, 10000):
+            if is_in_distribution(image, mean, inv, m_mean, m_std, 100000):
                 ys_true.append(label)
                 ys_pred.append(np.argmax(pred))
             else:
