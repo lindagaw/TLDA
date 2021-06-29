@@ -127,11 +127,11 @@ def get_distribution(tgt_data_loader):
 
     m_coeff = 0
 
-    for coeff in range(0, 100):
+    for coeff in range(0, 10000):
         upper = m_mean + m_std * coeff
         lower = m_mean - m_std * coeff
 
-        if sum(1 for m in mahalanobis if lower < m and m < upper) > len(mahalanobis) * 0.8:
+        if sum(1 for m in mahalanobis if lower < m and m < upper) > len(mahalanobis) * 0.6:
             print('found coefficient = ' + str(m_coeff))
             m_coeff = coeff
             break
@@ -168,9 +168,10 @@ def eval_baseline_ood(baseline, tgt_data_loader, tgt_data_loader_eval):
 
     # evaluate network
     for (images, labels) in tgt_data_loader_eval:
-        images = make_variable(images, volatile=True).detach().cpu().numpy()
+        images = make_variable(images, volatile=True)
         labels = make_variable(labels).squeeze_().detach().cpu().numpy()
         predictions = baseline(images).detach().cpu().numpy()
+        images = images.detach().cpu().numpy()
 
         for image, label, pred in zip(images, labels, predictions):
 
