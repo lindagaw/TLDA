@@ -131,7 +131,7 @@ def get_distribution(tgt_data_loader):
         upper = m_mean + m_std * coeff
         lower = m_mean - m_std * coeff
 
-        if sum(1 for m in mahalanobis if lower < m and m < upper) > len(mahalanobis) * 0.6:
+        if sum(1 for m in mahalanobis if lower < m and m < upper) > len(mahalanobis) * 0.8:
             print('found coefficient = ' + str(m_coeff))
             m_coeff = coeff
             break
@@ -139,8 +139,8 @@ def get_distribution(tgt_data_loader):
     return mean, inv, m_mean, m_std, m_coeff
 
 def is_in_distribution(sample, mean, inv, m_mean, m_std, m_coeff):
-    upper = m_mean + m_std * coeff
-    lower = m_mean - m_std * coeff
+    upper = m_mean + m_std * m_coeff
+    lower = m_mean - m_std * m_coeff
 
     m = (sample - mean) * inv * (sample - mean)
 
