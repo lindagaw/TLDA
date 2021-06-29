@@ -142,12 +142,9 @@ def is_in_distribution(sample, mean, inv, m_mean, m_std, m_coeff):
     upper = m_mean + m_std * m_coeff
     lower = m_mean - m_std * m_coeff
 
-    m = np.linalg.norm((sample - mean) * inv * (sample - mean))
+    sample = np.linalg.norm(sample)
 
-    print(lower)
-    print(m_mean)
-    print(m)
-    print(upper)
+    m = np.linalg.norm((sample - mean) * inv * (sample - mean))
 
     if lower < m and m < upper:
         return True
