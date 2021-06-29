@@ -35,19 +35,19 @@ if __name__ == '__main__':
     src_baseline = train_baseline(src_baseline, src_data_loader)
 
     # train target baseline
-    print("=== Training baseline for target domain ===")
-    print(">>> Target Baseline <<<")
-    print(tgt_baseline)
+    # print("=== Training baseline for target domain ===")
+    # print(">>> Target Baseline <<<")
+    # print(tgt_baseline)
 
-    tgt_baseline = train_baseline(tgt_baseline, tgt_data_loader)
+    # tgt_baseline = train_baseline(tgt_baseline, tgt_data_loader)
 
     # eval source model on source data
     print("=== Evaluating source baseline for source domain ===")
     eval_baseline(src_baseline, src_data_loader_eval)
 
     # eval target model on target data
-    print("=== Evaluating target baseline for target domain ===")
-    eval_baseline(tgt_baseline, tgt_data_loader_eval)
+    # print("=== Evaluating target baseline for target domain ===")
+    # eval_baseline(tgt_baseline, tgt_data_loader_eval)
 
     print('=====================================================')
     print('==================== TL/DA Magic ====================')
