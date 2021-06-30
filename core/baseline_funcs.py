@@ -177,7 +177,7 @@ def eval_baseline_ood(baseline, tgt_data_loader, tgt_data_loader_eval):
 
         for image, label, pred in zip(images, labels, predictions):
 
-            if is_in_distribution(image, mean, inv, m_mean, m_std, 10):
+            if is_in_distribution(image, mean, inv, m_mean, m_std, 20):
                 ys_true.append(label)
                 ys_pred.append(np.argmax(pred))
             else:
