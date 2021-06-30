@@ -127,11 +127,15 @@ def get_distribution(tgt_data_loader):
 
     m_coeff = 0
 
+    threshold = len(mahalanobis) * 0.4
+
     for coeff in range(0, 10000):
         upper = m_mean + m_std * coeff
         lower = m_mean - m_std * coeff
 
-        if sum(1 for m in mahalanobis if lower < m and m < upper) > len(mahalanobis) * 0.8:
+        valids = [i for i in mahalanobis if lower < i and i < upper]
+
+        if len(valids) > threshold and len(valids) < 0.8:
             print('found coefficient = ' + str(m_coeff))
             m_coeff = coeff
             break
@@ -177,7 +181,7 @@ def eval_baseline_ood(baseline, tgt_data_loader, tgt_data_loader_eval):
 
         for image, label, pred in zip(images, labels, predictions):
 
-            if is_in_distribution(image, mean, inv, m_mean, m_std, 10.35): 
+            if is_in_distribution(image, mean, inv, m_mean, m_std, m_coeff): 
                 #10.45 works for
                 ys_true.append(label)
                 ys_pred.append(np.argmax(pred))

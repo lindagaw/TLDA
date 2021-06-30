@@ -65,4 +65,4 @@ if __name__ == '__main__':
     print('=====================================================')
     print('==================== OOD on baseline ====================')
     print('=====================================================')
-    eval_baseline_ood(src_baseline, src_data_loader, tgt_data_loader_eval)
+    eval_baseline_ood(src_baseline, tgt_data_loader, tgt_data_loader_eval)
