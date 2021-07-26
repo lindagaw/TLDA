@@ -473,7 +473,4 @@ def eval_tgt_with_probe(encoder, critic, src_classifier, tgt_classifier, data_lo
     loss /= len(data_loader)
     acc /= len(data_loader.dataset)
     #f1 /= len(data_loader.dataset)
-    f1 = get_f1(ys_pred, ys_true, 'macro')
-    f1_weighted = get_f1(ys_pred, ys_true, 'weighted')
-
-    print("Avg Loss = {}, F1 = {:2%}, Weighted F1 = {:2%}".format(loss, f1, f1_weighted))
+    print("Avg Accuracy = {:2%}".format(accuracy_score(y_true=y_trues, y_pred=y_preds)))
