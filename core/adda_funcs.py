@@ -473,4 +473,4 @@ def eval_tgt_with_probe(encoder, critic, src_classifier, tgt_classifier, data_lo
     loss /= len(data_loader)
     acc /= len(data_loader.dataset)
     #f1 /= len(data_loader.dataset)
-    print("Avg Accuracy = {:2%}".format(accuracy_score(y_true=y_trues, y_pred=y_preds)))
+    print("Avg Accuracy = {:2%}".format(accuracy_score(y_true=ys_true, y_pred=ys_pred)))
