@@ -445,9 +445,9 @@ def eval_tgt_with_probe(encoder, critic, src_classifier, tgt_classifier, data_lo
     src_classifier.eval()
     tgt_classifier.eval()
     # init loss and accuracy
-    loss = 0
-    acc = 0
-    f1 = 0
+    loss = 0.0
+    acc = 0.0
+    f1 = 0.0
 
     ys_pred = []
     ys_true = []
