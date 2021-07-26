@@ -8,7 +8,7 @@ urllib.request.install_opener(opener)
 
 import params
 from core import eval_src_encoder, eval_tgt_encoder, train_src_encoder, train_tgt_encoder, eval_ADDA, train_tgt_classifier
-from core import get_distribution
+from core import get_distribution, eval_tgt_with_probe
 
 from models import Discriminator, LeNetHalfClassifier, LeNetHalfEncoder
 from utils import get_data_loader, init_model, init_random_seed, visualize_net
@@ -89,3 +89,6 @@ if __name__ == '__main__':
 
     print(">>> source + target encoders <<<")
     eval_ADDA(src_encoder, tgt_encoder, src_classifier, tgt_classifier, critic, tgt_data_loader_eval)
+
+    print(">>> enhanced domain adaptation<<<")
+    eval_tgt_with_probe(tgt_encoder, critic, src_classifier, tgt_classifier, tgt_data_loader_eval)
