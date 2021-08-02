@@ -9,6 +9,7 @@ urllib.request.install_opener(opener)
 import params
 from core import eval_src_encoder, eval_tgt_encoder, train_src_encoder, train_tgt_encoder, eval_ADDA, train_tgt_classifier
 from core import get_distribution, eval_tgt_with_probe
+from datasets import get_office_home
 
 from models import Discriminator, LeNetHalfClassifier, LeNetHalfEncoder
 from utils import get_data_loader, init_model, init_random_seed, visualize_net
@@ -24,6 +25,11 @@ if __name__ == '__main__':
     tgt_data_loader = get_data_loader(params.tgt_dataset)
     tgt_data_loader_eval = get_data_loader(params.tgt_dataset, train=False)
 
+    #src_data_loader = get_office_home(dataset = 'office-home-real-world', train=True)
+    #src_data_loader_eval = get_office_home(dataset = 'office-home-real-world', train=False)
+    #tgt_data_loader = get_office_home(dataset = 'office-home-clipart', train=True)
+    #tgt_data_loader_eval = get_office_home(dataset = 'office-home-clipart', train=False)
+    
     # load models
     tgt_encoder = init_model(net=LeNetHalfEncoder(),
                              restore=params.tgt_encoder_restore)

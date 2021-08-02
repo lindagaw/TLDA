@@ -44,7 +44,8 @@ class LeNetHalfClassifier(nn.Module):
     def __init__(self):
         """Init LeNetHalf encoder."""
         super(LeNetHalfClassifier, self).__init__()
-        self.fc2 = nn.Linear(500, 10)
+        #self.fc2 = nn.Linear(500, 10)
+        self.fc2 = nn.Linear(500, 65)
 
     def forward(self, feat):
         """Forward the LeNetHalf classifier."""
