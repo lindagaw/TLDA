@@ -20,15 +20,15 @@ if __name__ == '__main__':
     init_random_seed(params.manual_seed)
 
     # load dataset
-    src_data_loader = get_data_loader(params.src_dataset)
-    src_data_loader_eval = get_data_loader(params.src_dataset, train=False)
-    tgt_data_loader = get_data_loader(params.tgt_dataset)
-    tgt_data_loader_eval = get_data_loader(params.tgt_dataset, train=False)
+    #src_data_loader = get_data_loader(params.src_dataset)
+    #src_data_loader_eval = get_data_loader(params.src_dataset, train=False)
+    #tgt_data_loader = get_data_loader(params.tgt_dataset)
+    #tgt_data_loader_eval = get_data_loader(params.tgt_dataset, train=False)
 
-    #src_data_loader = get_office_home(dataset = 'office-home-real-world', train=True)
-    #src_data_loader_eval = get_office_home(dataset = 'office-home-real-world', train=False)
-    #tgt_data_loader = get_office_home(dataset = 'office-home-clipart', train=True)
-    #tgt_data_loader_eval = get_office_home(dataset = 'office-home-clipart', train=False)
+    src_data_loader = get_office_home(dataset = 'office-home-real-world', train=True)
+    src_data_loader_eval = get_office_home(dataset = 'office-home-real-world', train=False)
+    tgt_data_loader = get_office_home(dataset = 'office-home-clipart', train=True)
+    tgt_data_loader_eval = get_office_home(dataset = 'office-home-clipart', train=False)
     
     # load models
     tgt_encoder = init_model(net=LeNetHalfEncoder(),
